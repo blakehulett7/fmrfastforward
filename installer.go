@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 )
 
 const storageDirectory = "fmrfastforward"
+const dbPath = storageDirectory + "/sql.db"
 
 func generateApiUrl(pagetoFetch string) string {
 	return fmt.Sprintf("https://yugipedia.com/api.php?action=query&prop=revisions&titles=%v&rvprop=content&format=json", pagetoFetch)
@@ -28,6 +30,9 @@ func getFmrData() {
 	if !fileExists(storageDirectory + "/characters.json") {
 		getFmrCharacters()
 		assert(fileExists(storageDirectory + "/characters.json"))
+	}
+	if !fileExists(dbPath) {
+		parseCharacterList()
 	}
 	//Check for the characters table in the db and create it if it is not there
 }
@@ -49,16 +54,25 @@ func getFmrCharacters() {
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Println("Couldn't get a response from the yugipedia api, error:", err)
-		bufio.NewScanner(os.Stdin).Scan()
 		return
 	}
 	defer res.Body.Close()
 	resData, err := io.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println("Couldn't read json response from the character list page, error:", err)
-		bufio.NewScanner(os.Stdin).Scan()
 		return
 	}
 	os.WriteFile(path, resData, 0777)
 	assert(fileExists(path))
+}
+
+func parseCharacterList() []string {
+	assert(!fileExists(dbPath))
+	assert(fileExists(storageDirectory + "/characters.json"))
+	data, err := os.ReadFile(storageDirectory + "/characters.json")
+	if err != nil {
+		fmt.Println("Couldn't read characters json stored on disk, error:", err)
+		return
+	}
+	json.Unmarshal()
 }
