@@ -92,6 +92,6 @@ func parseCharacterList() []string {
 		)
 		characters = append(characters, row)
 	}
-	fmt.Println(characters)
+	assert(len(characters) == 42)
 	return characters
 }
