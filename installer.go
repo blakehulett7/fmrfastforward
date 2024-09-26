@@ -29,6 +29,7 @@ func getFmrData() {
 		getFmrCharacters()
 		assert(fileExists(storageDirectory + "/characters.json"))
 	}
+	//Check for the characters table in the db and create it if it is not there
 }
 
 func getFmrCharacters() {
