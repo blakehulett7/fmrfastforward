@@ -108,4 +108,16 @@ func getCharacterData(fetchList []string) {
 		return
 	}
 	req.Header.Add("User-Agent", apiHeader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println("Couldn't execute get character data request, error:", err)
+		return
+	}
+	defer res.Body.Close()
+	resData, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("Couldn't write the get character data response json, error:", err)
+	}
+	os.WriteFile(storageDirectory+"/characterdata.json", resData, 0777)
+	assert(fileExists(storageDirectory + "/characterdata.json"))
 }
