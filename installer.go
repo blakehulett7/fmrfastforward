@@ -8,12 +8,11 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/joho/godotenv"
 )
 
 const storageDirectory = "fmrfastforward"
 const dbPath = storageDirectory + "/sql.db"
+const apiHeader = "speedrun bot, email: blake.hulett7@gmail.com"
 
 func generateApiUrl(pagetoFetch string) string {
 	return fmt.Sprintf("https://yugipedia.com/api.php?action=query&prop=revisions&titles=%v&rvprop=content&format=json", pagetoFetch)
@@ -31,10 +30,11 @@ func getFmrData() {
 		getFmrCharacters()
 		assert(fileExists(storageDirectory + "/characters.json"))
 	}
-	if !fileExists(dbPath) {
+	if !fileExists(storageDirectory + "/characterdata.json") {
 		charactersToFetch := parseCharacterList()
 		assert(len(charactersToFetch) == 42)
 		getCharacterData(charactersToFetch)
+		assert(fileExists(storageDirectory + "/characterdata.json"))
 	}
 }
 
@@ -47,10 +47,7 @@ func getFmrCharacters() {
 		fmt.Println("Couldn't generate request to get character list, error:", err)
 		return
 	}
-	godotenv.Load()
-	email := os.Getenv("EMAIL")
-	userAgent := fmt.Sprint("speedrun bot, email: ", email)
-	req.Header.Add("User-Agent", userAgent)
+	req.Header.Add("User-Agent", apiHeader)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Println("Couldn't get a response from the yugipedia api, error:", err)
@@ -105,5 +102,10 @@ func getCharacterData(fetchList []string) {
 		titles = titles + "|" + character
 	}
 	url := generateApiUrl(titles)
-	fmt.Println(url)
+	req, err := http.NewRequest("GET", url, bytes.NewBuffer([]byte("")))
+	if err != nil {
+		fmt.Println("Couldn't generate get char data request, error:", err)
+		return
+	}
+	req.Header.Add("User-Agent", apiHeader)
 }
