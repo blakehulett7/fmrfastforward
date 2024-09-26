@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -72,5 +73,14 @@ func parseCharacterList() []string {
 		fmt.Println("Couldn't read characters json stored on disk, error:", err)
 		return []string{}
 	}
-	json.Unmarshal()
+	dataStruct := CharactersPageJSON{}
+	err = json.Unmarshal(data, &dataStruct)
+	if err != nil {
+		fmt.Println("Couldn't decode characters json data stored on disk, error:", err)
+		return []string{}
+	}
+	charactersTableXwikiString := dataStruct.Query.Pages.Num369496.Revisions[0].Body
+	charactersTableRows := strings.Split(charactersTableXwikiString, "\n")[1 : len(strings.Split(charactersTableXwikiString, "\n"))-1]
+	fmt.Println(charactersTableRows)
+	return []string{}
 }
