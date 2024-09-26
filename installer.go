@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -44,7 +43,6 @@ func getFmrCharacters() {
 	req, err := http.NewRequest("GET", fmrCharactersUrl, bytes.NewBuffer([]byte("")))
 	if err != nil {
 		fmt.Println("Couldn't generate request to get character list, error:", err)
-		bufio.NewScanner(os.Stdin).Scan()
 		return
 	}
 	godotenv.Load()
@@ -72,7 +70,7 @@ func parseCharacterList() []string {
 	data, err := os.ReadFile(storageDirectory + "/characters.json")
 	if err != nil {
 		fmt.Println("Couldn't read characters json stored on disk, error:", err)
-		return
+		return []string{}
 	}
 	json.Unmarshal()
 }
