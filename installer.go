@@ -141,6 +141,7 @@ func buildCharactersDB() {
 				value.Title, "(FMR)", "",
 			),
 		),
+			value.Revisions[0].Body,
 		)
 	}
 }

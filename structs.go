@@ -1,9 +1,10 @@
 package main
 
 type Character struct {
-	Id   string
-	Name string
-	Deck Deck
+	Id    string
+	Name  string
+	Deck  CardTable
+	Drops DropTable
 }
 
 type Deck struct {
