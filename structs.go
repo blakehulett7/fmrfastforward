@@ -14,8 +14,10 @@ type Deck struct {
 }
 
 type Card struct {
-	Id   string
-	Name string
+	Id      string
+	Name    string
+	Attack  int
+	Defense int
 }
 
 type CharactersPageJSON struct {
@@ -28,4 +30,17 @@ type CharactersPageJSON struct {
 			} `json:"369496"`
 		} `json:"pages"`
 	} `json:"query"`
+}
+
+type CharacterJSON struct {
+	Query struct {
+		Pages map[string]Page `json:"pages"`
+	} `json:"query"`
+}
+
+type Page struct {
+	Title     string `json:"title"`
+	Revisions []struct {
+		Body string `json:"*"`
+	} `json:"revisions"`
 }

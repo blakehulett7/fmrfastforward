@@ -64,7 +64,6 @@ func getFmrCharacters() {
 }
 
 func parseCharacterList() []string {
-	assert(!fileExists(dbPath))
 	assert(fileExists(storageDirectory + "/characters.json"))
 	data, err := os.ReadFile(storageDirectory + "/characters.json")
 	if err != nil {
@@ -120,4 +119,28 @@ func getCharacterData(fetchList []string) {
 	}
 	os.WriteFile(storageDirectory+"/characterdata.json", resData, 0777)
 	assert(fileExists(storageDirectory + "/characterdata.json"))
+}
+
+func buildCharactersDB() {
+	assert(fileExists(storageDirectory + "/characterdata.json"))
+	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
+	if err != nil {
+		fmt.Println("Couldn't load the character json data from disk, error:", err)
+		return
+	}
+	dataStruct := CharacterJSON{}
+	err = json.Unmarshal(data, &dataStruct)
+	if err != nil {
+		fmt.Println("Couldn't decode the character json data on the disk, error:", err)
+		return
+	}
+	themap := dataStruct.Query.Pages
+	for _, value := range themap {
+		fmt.Println(strings.TrimSpace(
+			strings.ReplaceAll(
+				value.Title, "(FMR)", "",
+			),
+		),
+		)
+	}
 }
