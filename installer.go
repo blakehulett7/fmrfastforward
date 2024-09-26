@@ -32,9 +32,10 @@ func getFmrData() {
 		assert(fileExists(storageDirectory + "/characters.json"))
 	}
 	if !fileExists(dbPath) {
-		parseCharacterList()
+		charactersToFetch := parseCharacterList()
+		assert(len(charactersToFetch) == 42)
+		getCharacterData(charactersToFetch)
 	}
-	//Check for the characters table in the db and create it if it is not there
 }
 
 func getFmrCharacters() {
@@ -94,4 +95,15 @@ func parseCharacterList() []string {
 	}
 	assert(len(characters) == 42)
 	return characters
+}
+
+func getCharacterData(fetchList []string) {
+	assert(len(fetchList) == 42)
+	titles := ""
+	for _, character := range fetchList {
+		character = strings.ReplaceAll(character, " ", "_")
+		titles = titles + "|" + character
+	}
+	url := generateApiUrl(titles)
+	fmt.Println(url)
 }

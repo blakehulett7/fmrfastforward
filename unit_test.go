@@ -5,5 +5,6 @@ import (
 )
 
 func TestInstaller(t *testing.T) {
-	parseCharacterList()
+	chars := parseCharacterList()
+	getCharacterData(chars)
 }
