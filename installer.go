@@ -11,7 +11,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const apiURL = "https://yugipedia.com/api.php?action=query&prop=revisions&titles="
 const storageDirectory = "fmrfastforward"
 
 func generateApiUrl(pagetoFetch string) string {
