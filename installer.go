@@ -80,7 +80,18 @@ func parseCharacterList() []string {
 		return []string{}
 	}
 	charactersTableXwikiString := dataStruct.Query.Pages.Num369496.Revisions[0].Body
-	charactersTableRows := strings.Split(charactersTableXwikiString, "\n")[1 : len(strings.Split(charactersTableXwikiString, "\n"))-1]
-	fmt.Println(charactersTableRows)
-	return []string{}
+	charactersTableRows := strings.Split(charactersTableXwikiString, "\n")[1 : len(strings.Split(charactersTableXwikiString, "\n"))-3]
+	characters := []string{}
+	for _, row := range charactersTableRows {
+		row := strings.TrimSpace(
+			strings.ReplaceAll(
+				strings.ReplaceAll(
+					strings.Split(row, "|")[1], "[[", "",
+				), "]]", "",
+			),
+		)
+		characters = append(characters, row)
+	}
+	fmt.Println(characters)
+	return characters
 }
