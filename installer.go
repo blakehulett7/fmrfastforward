@@ -136,6 +136,10 @@ func buildCharactersDB() {
 	}
 	themap := dataStruct.Query.Pages
 	for _, value := range themap {
+		if len(value.Revisions) == 0 {
+			fmt.Println(strings.ToUpper(value.Title))
+			continue
+		}
 		fmt.Println(strings.TrimSpace(
 			strings.ReplaceAll(
 				value.Title, "(FMR)", "",
