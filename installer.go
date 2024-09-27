@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -135,17 +136,30 @@ func buildCharactersDB() {
 		return
 	}
 	themap := dataStruct.Query.Pages
-	for _, value := range themap {
-		if len(value.Revisions) == 0 {
-			fmt.Println(strings.ToUpper(value.Title))
+	wikitext := themap["19384"].Revisions[0].Body
+	wikitextslice := strings.Split(wikitext, "\n")
+	for idx, line := range wikitextslice {
+		if !strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "==D") {
 			continue
 		}
-		fmt.Println(strings.TrimSpace(
-			strings.ReplaceAll(
-				value.Title, "(FMR)", "",
-			),
-		),
-			value.Revisions[0].Body,
-		)
+		wikitextslice = slices.Delete(wikitextslice, 0, idx)
+		break
 	}
+	fmt.Println(wikitextslice)
+	/*
+		for key, value := range themap {
+			if len(value.Revisions) == 0 {
+				fmt.Println(strings.ToUpper(value.Title))
+				continue
+			}
+			fmt.Println(strings.TrimSpace(
+				strings.ReplaceAll(
+					value.Title, "(FMR)", "",
+				),
+			),
+				value.Revisions[0].Body,
+			)
+			fmt.Println(key)
+		}
+	*/
 }
