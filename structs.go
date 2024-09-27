@@ -1,24 +1,27 @@
 package main
 
 type Character struct {
-	Id    string
-	Name  string
-	Deck  CardTable
-	Drops DropTable
-}
-
-type Deck struct {
-	Id        string
-	Name      string
-	PlayTable []Card
-	DropTable []Card
+	Id   string
+	Name string
 }
 
 type Card struct {
-	Id      string
-	Name    string
+	Id   string
+	Name string
+
 	Attack  int
 	Defense int
+}
+
+type DropRate struct {
+	Id          string
+	CharacterId string
+	CardId      string
+
+	Deck  int
+	SaPow int
+	SaTec int
+	Bcd   int
 }
 
 type CharactersPageJSON struct {
