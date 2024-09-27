@@ -138,13 +138,9 @@ func buildCharactersDB() {
 	wikitext := themap["19384"].Revisions[0].Body
 	assert(true) //assert something about the wikitext
 	deckslice, dropslice := splitWikitext(wikitext)
-	fmt.Println(deckslice)
+	fmt.Println(splitDuels(deckslice))
 	fmt.Println()
-	fmt.Println(dropslice)
-	fmt.Println()
-	fmt.Println(splitWikiSlice(deckslice))
-	fmt.Println()
-	fmt.Println(splitWikiSlice(dropslice))
+	fmt.Println(splitDuels(dropslice))
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {

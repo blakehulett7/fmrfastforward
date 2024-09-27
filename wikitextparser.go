@@ -37,7 +37,7 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice []string) {
 	panic("Should never get here, something went wrong parsing the wikitext!")
 }
 
-func splitWikiSlice(wikiSlice []string) [][]string {
+func splitDuels(wikiSlice []string) [][]string {
 	//asert something about the wikiSlice
 	indices := []int{}
 	for idx, line := range wikiSlice {
@@ -50,14 +50,18 @@ func splitWikiSlice(wikiSlice []string) [][]string {
 		return [][]string{wikiSlice}
 	}
 	wikiSlices := [][]string{}
-	fmt.Println(indices)
+	//fmt.Println(indices)
 	for idx := range indices {
 		if idx == len(indices)-1 {
-			fmt.Println(idx, indices[idx], "stop")
-			fmt.Println(wikiSlice[indices[idx]:])
+			//fmt.Println(idx, indices[idx], "stop")
+			//fmt.Println(wikiSlice[indices[idx]:])
+			wikiSlices = append(wikiSlices, wikiSlice[indices[idx]:])
 			break
 		}
-		fmt.Println(idx, indices[idx])
+		//fmt.Println(idx, indices[idx])
+		//fmt.Println(wikiSlice[indices[idx]:indices[idx+1]])
+		wikiSlices = append(wikiSlices, wikiSlice[indices[idx]:indices[idx+1]])
+		fmt.Println()
 	}
 	return wikiSlices
 }
