@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -34,4 +35,29 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice []string) {
 		return deckSlice, dropSlice
 	}
 	panic("Should never get here, something went wrong parsing the wikitext!")
+}
+
+func splitWikiSlice(wikiSlice []string) [][]string {
+	//asert something about the wikiSlice
+	indices := []int{}
+	for idx, line := range wikiSlice {
+		if !strings.HasPrefix(line, "===") {
+			continue
+		}
+		indices = append(indices, idx)
+	}
+	if len(indices) == 0 {
+		return [][]string{wikiSlice}
+	}
+	wikiSlices := [][]string{}
+	fmt.Println(indices)
+	for idx := range indices {
+		if idx == len(indices)-1 {
+			fmt.Println(idx, indices[idx], "stop")
+			fmt.Println(wikiSlice[indices[idx]:])
+			break
+		}
+		fmt.Println(idx, indices[idx])
+	}
+	return wikiSlices
 }

@@ -137,10 +137,14 @@ func buildCharactersDB() {
 	themap := dataStruct.Query.Pages
 	wikitext := themap["19384"].Revisions[0].Body
 	assert(true) //assert something about the wikitext
-	decktext, droptext := splitWikitext(wikitext)
-	fmt.Println(decktext)
+	deckslice, dropslice := splitWikitext(wikitext)
+	fmt.Println(deckslice)
 	fmt.Println()
-	fmt.Println(droptext)
+	fmt.Println(dropslice)
+	fmt.Println()
+	fmt.Println(splitWikiSlice(deckslice))
+	fmt.Println()
+	fmt.Println(splitWikiSlice(dropslice))
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
