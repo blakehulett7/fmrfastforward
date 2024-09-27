@@ -13,7 +13,7 @@ type Card struct {
 	Defense int
 }
 
-type DropRate struct {
+type CardTable struct {
 	Id          string
 	CharacterId string
 	CardId      string
