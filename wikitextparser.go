@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -78,17 +79,22 @@ func getDuelTables(deckslice []string) DuelTable {
 	return duelTable
 }
 
-func parseDuelTable(duelTables DuelTable) (duel, cardId string, probability int) {
-	assert(len(duelTables) != 0)
-	for _, duelTable := range duelTables {
-		card := duelTable[1]
-		if !cardExists(card) {
-			initializeCard(card)
-		}
-		duel := duelTable[0]
-		cardId := getCardId(card)
-		probability, _ := strconv.Atoi(duelTable[2])
-		fmt.Println(duel, cardId, probability)
+func parseDuelTable(duelTableEntry DuelTableEntry) (duel, cardId string, probability int) {
+	for _, value := range duelTableEntry {
+		assert(value != "")
 	}
-	return "", "", 1
+	card := duelTableEntry[1]
+	if !cardExists(card) {
+		initializeCard(card)
+	}
+	duel = duelTableEntry[0]
+	cardId = getCardId(card)
+	probability, err := strconv.Atoi(duelTableEntry[2])
+	if err != nil {
+		panic(err)
+	}
+	assert(duel != "")
+	assert(cardId != "")
+	assert(probability != 0)
+	return duel, cardId, probability
 }
