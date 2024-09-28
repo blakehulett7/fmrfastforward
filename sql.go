@@ -30,6 +30,15 @@ func tableExists(tableName string) bool {
 	return true
 }
 
+func tableIsEmpty(tableName string) bool {
+	sqlQuery := fmt.Sprintf("SELECT count(*) FROM %v;", tableName)
+	data, _ := outputSql(sqlQuery)
+	if strings.ReplaceAll(string(data), "\n", "") != "0" {
+		return false
+	}
+	return true
+}
+
 func initializeDB() {
 	assert(!fileExists(storageDirectory + "/database.db"))
 	sqlQuery := `

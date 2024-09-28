@@ -20,10 +20,7 @@ func generateApiUrl(pagetoFetch string) string {
 
 func getFmrData() {
 	if !directoryExists(storageDirectory) {
-		err := os.Mkdir(storageDirectory, 0777)
-		if err != nil {
-			fmt.Println(err)
-		}
+		os.Mkdir(storageDirectory, 0777)
 		assert(directoryExists(storageDirectory))
 	}
 	if !fileExists(storageDirectory + "/characters.json") {

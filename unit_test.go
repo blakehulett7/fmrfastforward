@@ -6,5 +6,5 @@ import (
 )
 
 func TestInstaller(t *testing.T) {
-	fmt.Println(tableExists("cards"))
+	fmt.Println(tableIsEmpty("cards"))
 }
