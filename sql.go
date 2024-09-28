@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func runSql(sqlQuery string) {
@@ -23,7 +24,9 @@ func outputSql(sqlQuery string) ([]byte, error) {
 func tableExists(tableName string) bool {
 	sqlQuery := fmt.Sprintf("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='%v';", tableName)
 	data, _ := outputSql(sqlQuery)
-	fmt.Println(string(data))
+	if strings.ReplaceAll(string(data), "\n", "") == "0" {
+		return false
+	}
 	return true
 }
 
@@ -41,4 +44,5 @@ CREATE TABLE cardTables (
     );
 `
 	runSql(sqlQuery)
+	assert(tableExists("cardTables"))
 }

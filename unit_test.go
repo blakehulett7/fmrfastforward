@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestInstaller(t *testing.T) {
-	initializeDB()
+	fmt.Println(tableExists("cardTables"))
 }
