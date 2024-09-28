@@ -121,8 +121,9 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
 }
 
-func buildCharactersDB() {
+func buildCardTablesDB() {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
+	//assert that the cardTables db does not yet exist
 	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
 	if err != nil {
 		fmt.Println("Couldn't load the character json data from disk, error:", err)
@@ -134,8 +135,8 @@ func buildCharactersDB() {
 		fmt.Println("Couldn't decode the character json data on the disk, error:", err)
 		return
 	}
-	themap := charactersQuery.Query.Pages
-	wikitext := themap["19384"].Revisions[0].Body
+	characterPages := charactersQuery.Query.Pages
+	wikitext := characterPages["19384"].Revisions[0].Body
 	assert(wikitext != "")
 	decksection, dropsection := splitWikitext(wikitext)
 	assert(len(decksection) != 0)

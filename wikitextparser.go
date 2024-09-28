@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -64,12 +65,17 @@ func splitDuels(wikiSlice []string) [][]string {
 }
 
 func getDecks(deckslice []string) {
-	fmt.Println(strings.TrimSpace(
-		strings.ReplaceAll(deckslice[0], "===", "")),
-	)
 	for _, line := range deckslice {
+		duel := strings.TrimSpace(strings.ReplaceAll(deckslice[0], "===", ""))
 		if strings.Contains(line, ";") {
-			fmt.Println(line)
+			fmt.Println(line, duel)
+			entries := strings.Split(line, ";")
+			cardName := strings.TrimSpace(entries[0])
+			probability, err := strconv.Atoi(strings.TrimSpace(entries[1]))
+			if err != nil {
+				panic(err)
+			}
+
 		}
 	}
 }
