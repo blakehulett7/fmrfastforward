@@ -39,8 +39,12 @@ func getFmrData() {
 		assert(tableExists("probabilities"))
 	}
 	if !tableExists("cards") {
-		initializeCardDB()
+		initializeCardsDB()
 		assert(tableExists("cards"))
+	}
+	if !tableExists("fusions") {
+		initializeFusionsDB()
+		assert(tableExists("fusions"))
 	}
 	assert(tableIsEmpty("probabilities"))
 	buildProbabilitiesTable()
@@ -154,7 +158,7 @@ func buildProbabilitiesTable() {
 	for _, duelText := range deckTextByDuel {
 		duelTable := getDuelTables(duelText)
 		fmt.Println(duelTable)
-		fmt.Println()
+		//WriteDuelTable
 	}
 	//fmt.Println(splitDuels(dropsection))
 	/*

@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func runSql(sqlQuery string) {
@@ -39,6 +41,15 @@ func tableIsEmpty(tableName string) bool {
 	return true
 }
 
+func cardExists(cardName string) bool {
+	sqlQuery := fmt.Sprintf("SELECT count(*) FROM cards WHERE name = '%v';", cardName)
+	data, _ := outputSql(sqlQuery)
+	if strings.ReplaceAll(string(data), "\n", "") == "0" {
+		return false
+	}
+	return true
+}
+
 func initializeDB() {
 	assert(!fileExists(storageDirectory + "/database.db"))
 	sqlQuery := `
@@ -56,17 +67,48 @@ CREATE TABLE probabilities (
 	assert(tableExists("probabilities"))
 }
 
-func initializeCardDB() {
+func initializeCardsDB() {
 	assert(!tableExists("cards"))
 	sqlQuery := `
 CREATE TABLE cards (
     id TEXT PRIMARY KEY,
-    name TEXT,
+    name TEXT UNIQUE,
     atk INTEGER,
     def INTEGER,
-    fusions TEXT
     );
     `
 	runSql(sqlQuery)
 	assert(tableExists("cards"))
+}
+
+func initializeFusionsDB() {
+	assert(!tableExists("fusions"))
+	sqlQuery := `
+CREATE TABLE fusions (
+    id TEXT PRIMARY KEY,
+    card_id TEXT,
+    used_in TEXT,
+    material_1 TEXT,
+    material_2 TEXT,
+    FOREIGN KEY(card_id, used_in, material_1, material_2) REFERENCES cards(id, id, id, id));`
+	runSql(sqlQuery)
+	assert(tableExists("fusions"))
+}
+
+func initializeCard(cardName string) {
+	assert(!cardExists(cardName))
+	id := uuid.NewString()
+	sqlQuery := fmt.Sprintf("INSERT INTO cards(id, name) VALUES ('%v', '%v');", id, cardName)
+	runSql(sqlQuery)
+	assert(cardExists(cardName))
+}
+
+func writeDuelTables(duelTables []DuelTable) {
+	for _, duelTable := range duelTables {
+		card := duelTable[1]
+		if !cardExists(card) {
+			initializeCard(card)
+		}
+		fmt.Println()
+	}
 }
