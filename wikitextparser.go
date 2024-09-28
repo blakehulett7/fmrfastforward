@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -57,13 +56,12 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 			break
 		}
 		wikiSlices = append(wikiSlices, wikiSection[indices[idx]:indices[idx+1]])
-		fmt.Println()
 	}
 	assert(len(wikiSlices) != 0)
 	return wikiSlices
 }
 
-func getDuelTables(deckslice []string) {
+func getDuelTables(deckslice []string) []DuelTable {
 	assert(len(deckslice) != 0)
 	duelTables := []DuelTable{}
 	for _, line := range deckslice {
@@ -75,5 +73,5 @@ func getDuelTables(deckslice []string) {
 			duelTables = append(duelTables, [3]string{duel, cardName, probability})
 		}
 	}
-	fmt.Println(duelTables)
+	return duelTables
 }
