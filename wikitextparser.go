@@ -62,3 +62,11 @@ func splitDuels(wikiSlice []string) [][]string {
 	assert(len(wikiSlices) != 0)
 	return wikiSlices
 }
+
+func getDecks(deckslice []string) {
+	for _, line := range deckslice {
+		if strings.Contains(line, ";") {
+			fmt.Println(line)
+		}
+	}
+}

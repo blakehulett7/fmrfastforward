@@ -140,7 +140,12 @@ func buildCharactersDB() {
 	deckslice, dropslice := splitWikitext(wikitext)
 	assert(len(deckslice) != 0)
 	assert(len(dropslice) != 0)
-	fmt.Println(splitDuels(deckslice))
+	decksliceByDuel := splitDuels(deckslice)
+	fmt.Println(decksliceByDuel)
+	for _, deckslice := range decksliceByDuel {
+		getDecks(deckslice)
+		fmt.Println()
+	}
 	fmt.Println()
 	fmt.Println(splitDuels(dropslice))
 	/*
