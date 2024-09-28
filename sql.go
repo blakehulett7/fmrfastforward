@@ -26,9 +26,9 @@ func outputSql(sqlQuery string) ([]byte, error) {
 func tableExists(tableName string) bool {
 	sqlQuery := fmt.Sprintf("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='%v';", tableName)
 	data, err := outputSql(sqlQuery)
-    if err != nil {
-        panic("Something went wrong checking a table's existence")
-    }
+	if err != nil {
+		panic("Something went wrong checking a table's existence")
+	}
 	if strings.ReplaceAll(string(data), "\n", "") == "0" {
 		return false
 	}
@@ -38,9 +38,9 @@ func tableExists(tableName string) bool {
 func tableIsEmpty(tableName string) bool {
 	sqlQuery := fmt.Sprintf("SELECT count(*) FROM %v;", tableName)
 	data, err := outputSql(sqlQuery)
-    if err != nil {
-        panic("Something went wrong checking if table is empty")
-    }
+	if err != nil {
+		panic("Something went wrong checking if table is empty")
+	}
 	if strings.ReplaceAll(string(data), "\n", "") != "0" {
 		return false
 	}
@@ -50,9 +50,9 @@ func tableIsEmpty(tableName string) bool {
 func cardExists(cardName string) bool {
 	sqlQuery := fmt.Sprintf("SELECT count(*) FROM cards WHERE name = '%v';", cardName)
 	data, err := outputSql(sqlQuery)
-    if err != nil{
-        panic("Something went wrong checking a card's existence")
-    }
+	if err != nil {
+		panic("Something went wrong checking a card's existence")
+	}
 	if strings.ReplaceAll(string(data), "\n", "") == "0" {
 		return false
 	}
@@ -61,7 +61,14 @@ func cardExists(cardName string) bool {
 
 func probabilityExists(duel, cardId string) bool {
 	sqlQuery := fmt.Sprintf("SELECT count(*) FROM probabilities WHERE duel = '%v' AND cardId = '%v';", duel, cardId)
-    data, err := 
+	data, err := outputSql(sqlQuery)
+	if err != nil {
+		panic("Something went wrong checking if a probability has been written")
+	}
+	if strings.ReplaceAll(string(data), "\n", "") == "0" {
+		return false
+	}
+	return true
 }
 
 func getCardId(cardName string) string {
