@@ -56,3 +56,5 @@ type Deck []string
 type WikiSection []string
 
 type DuelText []string
+
+type DuelTable [3]string
