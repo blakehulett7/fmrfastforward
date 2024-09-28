@@ -152,7 +152,7 @@ func buildProbabilitiesTable() {
 	deckWikiTextByDuel := splitByDuels(decksection)
 	assert(len(deckWikiTextByDuel) != 0)
 	for _, duel := range deckWikiTextByDuel {
-		getDecksByDuel(duel)
+		getProbabilitiesByDuel(duel)
 		fmt.Println()
 	}
 	fmt.Println()
