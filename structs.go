@@ -11,12 +11,14 @@ type Card struct {
 
 	Attack  int
 	Defense int
+
+	FusionInfo string
 }
 
-type CardTable struct {
-	Id          string
-	CharacterId string
-	CardId      string
+type Probability struct {
+	Id            string
+	CharacterName string
+	CardId        string
 
 	Deck  int
 	SaPow int
@@ -47,14 +49,6 @@ type Page struct {
 	Revisions []struct {
 		Body string `json:"*"`
 	} `json:"revisions"`
-}
-
-type CardsEntry struct {
-	Id      string
-	Name    string
-	Atk     int
-	Def     int
-	Fusions string
 }
 
 type Deck []string

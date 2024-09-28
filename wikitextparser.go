@@ -75,7 +75,7 @@ func getDecksByDuel(deckslice []string) {
 			if err != nil {
 				panic(err)
 			}
-			//entry := CardTablesEntry{}
+			entry := CardTablesEntry{}
 			fmt.Println(cardName, probability, duel)
 		}
 	}

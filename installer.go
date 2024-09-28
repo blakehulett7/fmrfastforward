@@ -43,7 +43,7 @@ func getFmrData() {
 		assert(tableExists("cards"))
 	}
 	assert(tableIsEmpty("probabilities"))
-	buildCardTables()
+	buildProbabilitiesTable()
 }
 
 func getFmrCharacters() {
@@ -129,7 +129,7 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
 }
 
-func buildCardTables() {
+func buildProbabilitiesTable() {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
 	assert(tableIsEmpty("probabilities"))
 	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
