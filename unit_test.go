@@ -5,5 +5,5 @@ import (
 )
 
 func TestInstaller(t *testing.T) {
-	buildCardTablesDB()
+	initializeDB()
 }

@@ -75,7 +75,7 @@ func getDecks(deckslice []string) {
 			if err != nil {
 				panic(err)
 			}
-
+			fmt.Println(cardName, probability)
 		}
 	}
 }

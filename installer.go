@@ -36,6 +36,10 @@ func getFmrData() {
 		getCharacterData(charactersToFetch)
 		assert(fileExists(storageDirectory + "/characterdata.json"))
 	}
+	if !fileExists(storageDirectory + "/database.db") {
+		initializeDB()
+		assert(fileExists(storageDirectory + "/database.db"))
+	}
 }
 
 func getFmrCharacters() {
