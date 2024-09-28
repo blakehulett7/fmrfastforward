@@ -65,17 +65,18 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 }
 
 func getDecksByDuel(deckslice []string) {
+	assert(len(deckslice) != 0)
 	for _, line := range deckslice {
 		duel := strings.TrimSpace(strings.ReplaceAll(deckslice[0], "===", ""))
 		if strings.Contains(line, ";") {
-			fmt.Println(line, duel)
-			entries := strings.Split(line, ";")
-			cardName := strings.TrimSpace(entries[0])
-			probability, err := strconv.Atoi(strings.TrimSpace(entries[1]))
+			entryValues := strings.Split(line, ";")
+			cardName := strings.TrimSpace(entryValues[0])
+			probability, err := strconv.Atoi(strings.TrimSpace(entryValues[1]))
 			if err != nil {
 				panic(err)
 			}
-			fmt.Println(cardName, probability)
+			//entry := CardTablesEntry{}
+			fmt.Println(cardName, probability, duel)
 		}
 	}
 }

@@ -36,12 +36,13 @@ func getFmrData() {
 	if !fileExists(storageDirectory + "/database.db") {
 		initializeDB()
 		assert(fileExists(storageDirectory + "/database.db"))
+		assert(tableExists("probabilities"))
 	}
 	if !tableExists("cards") {
 		initializeCardDB()
 		assert(tableExists("cards"))
 	}
-	assert(tableIsEmpty("cardTables"))
+	assert(tableIsEmpty("probabilities"))
 	buildCardTables()
 }
 
@@ -130,7 +131,7 @@ func getCharacterData(fetchList []string) {
 
 func buildCardTables() {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
-	assert(tableIsEmpty("cardTables"))
+	assert(tableIsEmpty("probabilities"))
 	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
 	if err != nil {
 		fmt.Println("Couldn't load the character json data from disk, error:", err)
@@ -149,8 +150,9 @@ func buildCardTables() {
 	assert(len(decksection) != 0)
 	assert(len(dropsection) != 0)
 	deckWikiTextByDuel := splitByDuels(decksection)
-	for _, deck := range deckWikiTextByDuel {
-		getDecksByDuel(deck)
+	assert(len(deckWikiTextByDuel) != 0)
+	for _, duel := range deckWikiTextByDuel {
+		getDecksByDuel(duel)
 		fmt.Println()
 	}
 	fmt.Println()

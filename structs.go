@@ -49,7 +49,7 @@ type Page struct {
 	} `json:"revisions"`
 }
 
-type CardTablesEntry struct {
+type CardsEntry struct {
 	Id      string
 	Name    string
 	Atk     int

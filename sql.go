@@ -42,7 +42,7 @@ func tableIsEmpty(tableName string) bool {
 func initializeDB() {
 	assert(!fileExists(storageDirectory + "/database.db"))
 	sqlQuery := `
-CREATE TABLE cardTables (
+CREATE TABLE probabilities (
     id TEXT PRIMARY KEY,
     duel TEXT,
     card_id TEXT,
@@ -53,7 +53,7 @@ CREATE TABLE cardTables (
     );
 `
 	runSql(sqlQuery)
-	assert(tableExists("cardTables"))
+	assert(tableExists("probabilities"))
 }
 
 func initializeCardDB() {
