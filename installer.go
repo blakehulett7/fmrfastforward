@@ -136,7 +136,6 @@ func buildCharactersDB() {
 	}
 	themap := dataStruct.Query.Pages
 	wikitext := themap["19384"].Revisions[0].Body
-	assert(true) //assert something else about the wikitext
 	assert(wikitext != "")
 	deckslice, dropslice := splitWikitext(wikitext)
 	assert(len(deckslice) != 0)
