@@ -128,13 +128,13 @@ func buildCharactersDB() {
 		fmt.Println("Couldn't load the character json data from disk, error:", err)
 		return
 	}
-	characterPage := CharacterPage{}
-	err = json.Unmarshal(data, &characterPage)
+	charactersQuery := CharactersQuery{}
+	err = json.Unmarshal(data, &charactersQuery)
 	if err != nil {
 		fmt.Println("Couldn't decode the character json data on the disk, error:", err)
 		return
 	}
-	themap := characterPage.Query.Pages
+	themap := charactersQuery.Query.Pages
 	wikitext := themap["19384"].Revisions[0].Body
 	assert(wikitext != "")
 	decksection, dropsection := splitWikitext(wikitext)

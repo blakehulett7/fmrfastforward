@@ -36,7 +36,7 @@ type CharactersPageJSON struct {
 	} `json:"query"`
 }
 
-type CharacterPage struct {
+type CharactersQuery struct {
 	Query struct {
 		Pages map[string]Page `json:"pages"`
 	} `json:"query"`
