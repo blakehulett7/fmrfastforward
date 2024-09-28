@@ -79,7 +79,7 @@ func getDuelTables(deckslice []string) DuelTable {
 	return duelTable
 }
 
-func parseDuelTable(duelTableEntry DuelTableEntry) (duel, cardId string, probability int) {
+func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardId string, probability int) {
 	for _, value := range duelTableEntry {
 		assert(value != "")
 	}
