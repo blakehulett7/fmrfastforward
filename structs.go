@@ -57,4 +57,6 @@ type WikiSection []string
 
 type DuelText []string
 
-type DuelTable [3]string
+type DuelTableEntry [3]string
+
+type DuelTable []DuelTableEntry

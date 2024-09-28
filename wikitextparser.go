@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -61,17 +63,32 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 	return wikiSlices
 }
 
-func getDuelTables(deckslice []string) []DuelTable {
+func getDuelTables(deckslice []string) DuelTable {
 	assert(len(deckslice) != 0)
-	duelTables := []DuelTable{}
+	duelTable := DuelTable{}
 	for _, line := range deckslice {
 		duel := strings.TrimSpace(strings.ReplaceAll(deckslice[0], "===", ""))
 		if strings.Contains(line, ";") {
 			entryValues := strings.Split(line, ";")
 			cardName := strings.TrimSpace(entryValues[0])
 			probability := strings.TrimSpace(entryValues[1])
-			duelTables = append(duelTables, [3]string{duel, cardName, probability})
+			duelTable = append(duelTable, [3]string{duel, cardName, probability})
 		}
 	}
-	return duelTables
+	return duelTable
+}
+
+func parseDuelTable(duelTables DuelTable) (duel, cardId string, probability int) {
+	assert(len(duelTables) != 0)
+	for _, duelTable := range duelTables {
+		card := duelTable[1]
+		if !cardExists(card) {
+			initializeCard(card)
+		}
+		duel := duelTable[0]
+		cardId := getCardId(card)
+		probability, _ := strconv.Atoi(duelTable[2])
+		fmt.Println(duel, cardId, probability)
+	}
+	return "", "", 1
 }

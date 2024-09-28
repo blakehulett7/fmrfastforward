@@ -158,7 +158,8 @@ func buildProbabilitiesTable() {
 	for _, duelText := range deckTextByDuel {
 		duelTable := getDuelTables(duelText)
 		fmt.Println(duelTable)
-		//WriteDuelTable
+		fmt.Println()
+		//parseDuelTable
 	}
 	//fmt.Println(splitDuels(dropsection))
 	/*

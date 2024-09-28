@@ -50,6 +50,12 @@ func cardExists(cardName string) bool {
 	return true
 }
 
+func getCardId(cardName string) string {
+	sqlQuery := fmt.Sprintf("SELECT id FROM cards WHERE name = '%v';", cardName)
+	data, _ := outputSql(sqlQuery)
+	return strings.ReplaceAll(string(data), "\n", "")
+}
+
 func initializeDB() {
 	assert(!fileExists(storageDirectory + "/database.db"))
 	sqlQuery := `
@@ -101,14 +107,4 @@ func initializeCard(cardName string) {
 	sqlQuery := fmt.Sprintf("INSERT INTO cards(id, name) VALUES ('%v', '%v');", id, cardName)
 	runSql(sqlQuery)
 	assert(cardExists(cardName))
-}
-
-func writeDuelTables(duelTables []DuelTable) {
-	for _, duelTable := range duelTables {
-		card := duelTable[1]
-		if !cardExists(card) {
-			initializeCard(card)
-		}
-		fmt.Println()
-	}
 }
