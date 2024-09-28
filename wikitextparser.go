@@ -7,6 +7,7 @@ import (
 
 func splitWikitext(wikitext string) (deckSlice, dropSlice []string) {
 	//assert something about the wikitext
+	assert(wikitext != "")
 	wikitextslice := strings.Split(wikitext, "\n")
 	deckIdx := 0
 	dropIdx := 0
@@ -39,6 +40,7 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice []string) {
 
 func splitDuels(wikiSlice []string) [][]string {
 	//asert something about the wikiSlice
+	assert(len(wikiSlice) != 0)
 	indices := []int{}
 	for idx, line := range wikiSlice {
 		if !strings.HasPrefix(line, "===") {
@@ -63,5 +65,6 @@ func splitDuels(wikiSlice []string) [][]string {
 		wikiSlices = append(wikiSlices, wikiSlice[indices[idx]:indices[idx+1]])
 		fmt.Println()
 	}
+	assert(len(wikiSlices) != 0)
 	return wikiSlices
 }
