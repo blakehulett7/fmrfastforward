@@ -56,3 +56,9 @@ type CardTablesEntry struct {
 	Def     int
 	Fusions string
 }
+
+type Deck []string
+
+type WikiSection []string
+
+type DuelText []string

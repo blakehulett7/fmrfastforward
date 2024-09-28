@@ -148,10 +148,9 @@ func buildCardTables() {
 	decksection, dropsection := splitWikitext(wikitext)
 	assert(len(decksection) != 0)
 	assert(len(dropsection) != 0)
-	decksByDuel := splitDuels(decksection)
-	fmt.Println(decksByDuel)
-	for _, deck := range decksByDuel {
-		getDecks(deck)
+	deckWikiTextByDuel := splitByDuels(decksection)
+	for _, deck := range deckWikiTextByDuel {
+		getDecksByDuel(deck)
 		fmt.Println()
 	}
 	fmt.Println()

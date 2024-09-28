@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func splitWikitext(wikitext string) (deckSlice, dropSlice []string) {
+func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 	//assert something about the wikitext
 	assert(wikitext != "")
 	wikitextslice := strings.Split(wikitext, "\n")
@@ -39,32 +39,32 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice []string) {
 	panic("Should never get here, something went wrong parsing the wikitext!")
 }
 
-func splitDuels(wikiSlice []string) [][]string {
-	assert(len(wikiSlice) != 0)
+func splitByDuels(wikiSection WikiSection) []WikiSection {
+	assert(len(wikiSection) != 0)
 	indices := []int{}
-	for idx, line := range wikiSlice {
+	for idx, line := range wikiSection {
 		if !strings.HasPrefix(line, "===") {
 			continue
 		}
 		indices = append(indices, idx)
 	}
 	if len(indices) == 0 {
-		return [][]string{wikiSlice}
+		return []WikiSection{wikiSection}
 	}
-	wikiSlices := [][]string{}
+	wikiSlices := []WikiSection{}
 	for idx := range indices {
 		if idx == len(indices)-1 {
-			wikiSlices = append(wikiSlices, wikiSlice[indices[idx]:])
+			wikiSlices = append(wikiSlices, wikiSection[indices[idx]:])
 			break
 		}
-		wikiSlices = append(wikiSlices, wikiSlice[indices[idx]:indices[idx+1]])
+		wikiSlices = append(wikiSlices, wikiSection[indices[idx]:indices[idx+1]])
 		fmt.Println()
 	}
 	assert(len(wikiSlices) != 0)
 	return wikiSlices
 }
 
-func getDecks(deckslice []string) {
+func getDecksByDuel(deckslice []string) {
 	for _, line := range deckslice {
 		duel := strings.TrimSpace(strings.ReplaceAll(deckslice[0], "===", ""))
 		if strings.Contains(line, ";") {
