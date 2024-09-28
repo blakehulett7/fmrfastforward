@@ -64,6 +64,7 @@ func splitDuels(wikiSlice []string) [][]string {
 }
 
 func getDecks(deckslice []string) {
+	fmt.Println(strings.ReplaceAll(deckslice[0], "===", ""))
 	for _, line := range deckslice {
 		if strings.Contains(line, ";") {
 			fmt.Println(line)
