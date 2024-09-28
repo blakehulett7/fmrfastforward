@@ -41,6 +41,8 @@ func getFmrData() {
 		initializeCardDB()
 		assert(tableExists("cards"))
 	}
+	assert(tableIsEmpty("cardTables"))
+	buildCardTables()
 }
 
 func getFmrCharacters() {
@@ -126,9 +128,9 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
 }
 
-func buildCardTablesDB() {
+func buildCardTables() {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
-	//assert that the cardTables db does not yet exist
+	assert(tableIsEmpty("cardTables"))
 	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
 	if err != nil {
 		fmt.Println("Couldn't load the character json data from disk, error:", err)

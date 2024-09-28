@@ -48,3 +48,11 @@ type Page struct {
 		Body string `json:"*"`
 	} `json:"revisions"`
 }
+
+type CardTablesEntry struct {
+	Id      string
+	Name    string
+	Atk     int
+	Def     int
+	Fusions string
+}
