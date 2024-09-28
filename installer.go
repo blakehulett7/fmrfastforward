@@ -137,13 +137,13 @@ func buildCharactersDB() {
 	themap := dataStruct.Query.Pages
 	wikitext := themap["19384"].Revisions[0].Body
 	assert(wikitext != "")
-	deckslice, dropslice := splitWikitext(wikitext)
-	assert(len(deckslice) != 0)
-	assert(len(dropslice) != 0)
-	decksliceByDuel := splitDuels(deckslice)
-	fmt.Println(decksliceByDuel)
-	for _, deckslice := range decksliceByDuel {
-		getDecks(deckslice)
+	decksection, dropsection := splitWikitext(wikitext)
+	assert(len(decksection) != 0)
+	assert(len(dropsection) != 0)
+	decksByDuel := splitDuels(decksection)
+	fmt.Println(decksByDuel)
+	for _, deck := range decksByDuel {
+		getDecks(deck)
 		fmt.Println()
 	}
 	fmt.Println()
