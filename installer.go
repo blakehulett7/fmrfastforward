@@ -147,7 +147,7 @@ func buildCharactersDB() {
 		fmt.Println()
 	}
 	fmt.Println()
-	fmt.Println(splitDuels(dropslice))
+	fmt.Println(splitDuels(dropsection))
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
