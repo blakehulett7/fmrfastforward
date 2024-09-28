@@ -86,6 +86,7 @@ func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardId string, pr
 	card := duelTableEntry[1]
 	if !cardExists(card) {
 		initializeCard(card)
+		assert(cardExists(card))
 	}
 	duel = duelTableEntry[0]
 	cardId = getCardId(card)

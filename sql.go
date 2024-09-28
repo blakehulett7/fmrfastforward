@@ -72,8 +72,13 @@ func probabilityExists(duel, cardId string) bool {
 }
 
 func getCardId(cardName string) string {
+	assert(cardName != "")
 	sqlQuery := fmt.Sprintf("SELECT id FROM cards WHERE name = '%v';", cardName)
-	data, _ := outputSql(sqlQuery)
+	data, err := outputSql(sqlQuery)
+	if err != nil {
+		message := fmt.Sprintf("Something went wrong getting %v's card id", cardName)
+		panic(message)
+	}
 	return strings.ReplaceAll(string(data), "\n", "")
 }
 
@@ -130,9 +135,20 @@ func initializeCard(cardName string) {
 	assert(cardExists(cardName))
 }
 
+func initializeProbability(duel, cardId string) {
+	assert(!probabilityExists(duel, cardId))
+	id := uuid.NewString()
+	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card_id) VALUES('%v', '%v', '%v';", id, duel, cardId)
+	runSql(sqlQuery)
+	assert(probabilityExists(duel, cardId))
+}
+
 func writeDuelTableAsDeck(duelTable DuelTable) {
 	assert(len(duelTable) != 0)
 	for _, entry := range duelTable {
 		duel, cardId, deck := parseDuelTableEntry(entry)
+		if !probabilityExists(duel, cardId) {
+			initializeProbability(duel, cardId)
+		}
 	}
 }
