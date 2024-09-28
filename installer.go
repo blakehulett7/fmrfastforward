@@ -40,6 +40,10 @@ func getFmrData() {
 		initializeDB()
 		assert(fileExists(storageDirectory + "/database.db"))
 	}
+	if !tableExists("cards") {
+		initializeCardDB()
+		assert(tableExists("cards"))
+	}
 }
 
 func getFmrCharacters() {

@@ -46,3 +46,18 @@ CREATE TABLE cardTables (
 	runSql(sqlQuery)
 	assert(tableExists("cardTables"))
 }
+
+func initializeCardDB() {
+	assert(!tableExists("cards"))
+	sqlQuery := `
+CREATE TABLE cards (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    atk INTEGER,
+    def INTEGER,
+    fusions TEXT
+    );
+    `
+	runSql(sqlQuery)
+	assert(tableExists("cards"))
+}
