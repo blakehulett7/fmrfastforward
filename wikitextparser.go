@@ -77,23 +77,18 @@ func getDuelTables(deckslice []string) DuelTable {
 	return duelTable
 }
 
-func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardId string, probability int) {
+func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardName string, probability int) {
 	for _, value := range duelTableEntry {
 		assert(value != "")
 	}
-	card := duelTableEntry[1]
-	if !cardExists(card) {
-		initializeCard(card)
-		assert(cardExists(card))
-	}
 	duel = duelTableEntry[0]
-	cardId = getCardId(card)
+	cardName = duelTableEntry[1]
 	probability, err := strconv.Atoi(duelTableEntry[2])
 	if err != nil {
 		panic(err)
 	}
 	assert(duel != "")
-	assert(cardId != "")
+	assert(cardName != "")
 	assert(probability != 0)
-	return duel, cardId, probability
+	return duel, cardName, probability
 }
