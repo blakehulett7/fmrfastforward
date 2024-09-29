@@ -136,7 +136,7 @@ func getCharacterData(fetchList []string) {
 func buildProbabilitiesTable() {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
 	assert(tableIsEmpty("probabilities"))
-	charactersQuery := read_character_data(storageDirectory + "/characterdata.json")
+	charactersQuery := read_character_data()
 	characterPages := charactersQuery.Query.Pages
 	wikitext := characterPages["19384"].Revisions[0].Body
 	assert(wikitext != "")

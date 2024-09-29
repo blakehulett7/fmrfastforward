@@ -24,7 +24,7 @@ func parse_wikitext(wikitext string) {
 	fmt.Println(entries)
 }
 
-func read_character_data(path string) CharactersQuery {
+func read_character_data() CharactersQuery {
 	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
 	if err != nil {
 		fmt.Println("Couldn't load the character json data from disk, error:", err)
