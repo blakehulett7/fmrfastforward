@@ -76,7 +76,6 @@ func getFmrCharacters() {
 }
 
 func parseCharacterList() []string {
-	//Not Pure?
 	assert(fileExists(storageDirectory + "/characters.json"))
 	data, err := os.ReadFile(storageDirectory + "/characters.json")
 	if err != nil {
