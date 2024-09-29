@@ -11,11 +11,14 @@ import (
 )
 
 func parse_wikitext(wikitext string) {
+	assert(wikitext != "")
 	decksection, dropsection := splitWikitext(wikitext)
 	assert(len(decksection) != 0)
 	assert(len(dropsection) != 0)
 	deckTextByDuel := splitByDuels(decksection)
+	drop_text_by_duel := splitByDuels(dropsection)
 	assert(len(deckTextByDuel) != 0)
+	assert(len(drop_text_by_duel) != 0)
 	entries := []Probability{}
 	for _, duelText := range deckTextByDuel {
 		duelTable := getDuelTable(duelText)

@@ -139,7 +139,6 @@ func buildProbabilitiesTable() {
 	charactersQuery := read_character_data()
 	characterPages := charactersQuery.Query.Pages
 	wikitext := characterPages["19384"].Revisions[0].Body
-	assert(wikitext != "")
 	parse_wikitext(wikitext)
 	/*
 		drop_text_by_duel := splitByDuels(dropsection)
