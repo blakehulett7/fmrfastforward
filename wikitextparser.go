@@ -68,7 +68,6 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 func split_by_table(wikiSection WikiSection) []WikiSection {
 	assert(len(wikiSection) != 0)
 	indices := []int{}
-	fmt.Println(wikiSection)
 	for idx, line := range wikiSection {
 		if !strings.HasPrefix(line, "|") {
 			continue
@@ -80,7 +79,16 @@ func split_by_table(wikiSection WikiSection) []WikiSection {
 	}
 	assert(len(indices) == 3) // These are the 3 possible drop table sections, has to be 3
 	fmt.Println(indices)
-	return nil
+	sections := []WikiSection{}
+	for idx := range indices {
+		if idx == len(indices)-1 {
+			sections = append(sections, wikiSection[indices[idx]:])
+			break
+		}
+		sections = append(sections, wikiSection[indices[idx]:indices[idx+1]])
+	}
+	assert(len(sections) == 3)
+	return sections
 }
 
 func getDuelTable(deckslice []string) DuelTable {
