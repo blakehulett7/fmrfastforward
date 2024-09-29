@@ -1,12 +1,43 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
 )
+
+func parse_wikitext(wikitext string) {
+	decksection, dropsection := splitWikitext(wikitext)
+	assert(len(decksection) != 0)
+	assert(len(dropsection) != 0)
+	deckTextByDuel := splitByDuels(decksection)
+	assert(len(deckTextByDuel) != 0)
+	entries := []Probability{}
+	for _, duelText := range deckTextByDuel {
+		duelTable := getDuelTable(duelText)
+		entries = append(entries, parse_deck_table(duelTable)...)
+	}
+	fmt.Println(entries)
+}
+
+func read_character_data(path string) CharactersQuery {
+	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
+	if err != nil {
+		fmt.Println("Couldn't load the character json data from disk, error:", err)
+		panic(err)
+	}
+	charactersQuery := CharactersQuery{}
+	err = json.Unmarshal(data, &charactersQuery)
+	if err != nil {
+		fmt.Println("Couldn't decode the character json data on the disk, error:", err)
+		panic(err)
+	}
+	return charactersQuery
+}
 
 func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 	//assert something about the wikitext
@@ -78,7 +109,6 @@ func split_by_table(wikiSection WikiSection) []WikiSection {
 		indices = append(indices, idx)
 	}
 	assert(len(indices) == 3) // These are the 3 possible drop table sections, has to be 3
-	fmt.Println(indices)
 	sections := []WikiSection{}
 	for idx := range indices {
 		if idx == len(indices)-1 {
@@ -137,3 +167,14 @@ func parse_deck_table(duelTable DuelTable) []Probability {
 	}
 	return probabilities
 }
+
+/*
+func parse_sapow_table(drop_table DuelTable, duel string) {
+	assert(len(drop_table) != 0)
+	assert(duel != "")
+	probabilities := []Probability{}
+	for _, entry := range drop_table {
+
+	}
+}
+*/

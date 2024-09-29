@@ -136,38 +136,23 @@ func getCharacterData(fetchList []string) {
 func buildProbabilitiesTable() {
 	assert(fileExists(storageDirectory + "/characterdata.json"))
 	assert(tableIsEmpty("probabilities"))
-	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
-	if err != nil {
-		fmt.Println("Couldn't load the character json data from disk, error:", err)
-		return
-	}
-	charactersQuery := CharactersQuery{}
-	err = json.Unmarshal(data, &charactersQuery)
-	if err != nil {
-		fmt.Println("Couldn't decode the character json data on the disk, error:", err)
-		return
-	}
+	charactersQuery := read_character_data(storageDirectory + "/characterdata.json")
 	characterPages := charactersQuery.Query.Pages
 	wikitext := characterPages["19384"].Revisions[0].Body
 	assert(wikitext != "")
-	decksection, dropsection := splitWikitext(wikitext)
-	assert(len(decksection) != 0)
-	assert(len(dropsection) != 0)
-	deckTextByDuel := splitByDuels(decksection)
-	assert(len(deckTextByDuel) != 0)
-	entries := []Probability{}
-	for _, duelText := range deckTextByDuel {
-		duelTable := getDuelTable(duelText)
-		entries = append(entries, parse_deck_table(duelTable)...)
-	}
-	drop_text_by_duel := splitByDuels(dropsection)
-	for _, drop_text := range drop_text_by_duel {
-		duel := strings.TrimSpace(strings.ReplaceAll(drop_text[0], "===", ""))
-		drop_table := split_by_table(drop_text)
-		if drop_table != nil {
+	parse_wikitext(wikitext)
+	/*
+		drop_text_by_duel := splitByDuels(dropsection)
+		for _, drop_text := range drop_text_by_duel {
+			duel := strings.TrimSpace(strings.ReplaceAll(drop_text[0], "===", ""))
+			fmt.Println(duel)
+			drop_text_by_table := split_by_table(drop_text)
+			sapow_table, satec_table, bcd_table := drop_tables[0], drop_tables[1], drop_tables[2]
+			parse_sapow_table(sapow_table, duel)
+			parse_satec_table(satec_table, duel)
+			parse_bcd_table(bcd_table, duel)
 		}
-		fmt.Println(duel)
-	}
+	*/
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
