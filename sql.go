@@ -60,7 +60,7 @@ func cardExists(cardName string) bool {
 }
 
 func probabilityExists(duel, cardId string) bool {
-	sqlQuery := fmt.Sprintf("SELECT count(*) FROM probabilities WHERE duel = '%v' AND cardId = '%v';", duel, cardId)
+	sqlQuery := fmt.Sprintf("SELECT count(*) FROM probabilities WHERE duel = '%v' AND card_id = '%v';", duel, cardId)
 	data, err := outputSql(sqlQuery)
 	if err != nil {
 		panic("Something went wrong checking if a probability has been written")
@@ -116,7 +116,7 @@ CREATE TABLE cards (
     id TEXT PRIMARY KEY,
     name TEXT UNIQUE,
     atk INTEGER,
-    def INTEGER,
+    def INTEGER
     );
     `
 	runSql(sqlQuery)
@@ -148,7 +148,7 @@ func initializeCard(cardName string) {
 func initializeProbability(duel, cardId string) {
 	assert(!probabilityExists(duel, cardId))
 	id := uuid.NewString()
-	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card_id) VALUES('%v', '%v', '%v';", id, duel, cardId)
+	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card_id) VALUES('%v', '%v', '%v');", id, duel, cardId)
 	runSql(sqlQuery)
 	assert(probabilityExists(duel, cardId))
 }
@@ -161,6 +161,6 @@ func writeDuelTableAsDeck(duelTable DuelTable) {
 			initializeProbability(duel, cardId)
 			assert(probabilityExists(duel, cardId))
 		}
-		getProbabilityId(duel, cardId)
+		fmt.Println(getProbabilityId(duel, cardId), deck)
 	}
 }

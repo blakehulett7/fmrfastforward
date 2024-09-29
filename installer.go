@@ -76,6 +76,7 @@ func getFmrCharacters() {
 }
 
 func parseCharacterList() []string {
+	//Not Pure?
 	assert(fileExists(storageDirectory + "/characters.json"))
 	data, err := os.ReadFile(storageDirectory + "/characters.json")
 	if err != nil {
@@ -157,8 +158,8 @@ func buildProbabilitiesTable() {
 	assert(len(deckTextByDuel) != 0)
 	for _, duelText := range deckTextByDuel {
 		duelTable := getDuelTables(duelText)
-		fmt.Println(duelTable)
-		fmt.Println()
+		//fmt.Println(duelTable)
+		//fmt.Println()
 		writeDuelTableAsDeck(duelTable)
 	}
 	//fmt.Println(splitDuels(dropsection))
