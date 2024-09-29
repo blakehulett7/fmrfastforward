@@ -98,7 +98,7 @@ func initializeDB() {
 CREATE TABLE probabilities (
     id TEXT PRIMARY KEY,
     duel TEXT,
-    card_id TEXT,
+    card TEXT,
     deck INTEGER,
     sapow INTEGER,
     satec INTEGER,
@@ -155,10 +155,14 @@ func initializeProbability(duel, cardId string) {
 
 func writeDuelTableAsDeck(duelTable DuelTable) {
 	assert(len(duelTable) != 0)
+	values_string := ""
 	for _, entry := range duelTable {
-		duel, cardId, deck := parseDuelTableEntry(entry)
+		duel, cardName, deck := parseDuelTableEntry(entry)
 		id := uuid.NewString()
-		sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card_id, deck) VALUES ('%v', '%v', '%v', %v);", id, duel, cardId, deck)
-		runSql(sqlQuery)
+		values_string += fmt.Sprintf(",('%v', '%v', '%v', %v)", id, duel, cardName, deck)
 	}
+	values_string = strings.Replace(values_string, ",", "", 1)
+	fmt.Println(values_string)
+	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card, deck) VALUES %v;", values_string)
+	runSql(sqlQuery)
 }
