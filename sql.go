@@ -161,6 +161,10 @@ func writeDuelTableAsDeck(duelTable DuelTable) {
 			initializeProbability(duel, cardId)
 			assert(probabilityExists(duel, cardId))
 		}
-		fmt.Println(getProbabilityId(duel, cardId), deck)
+		id := getProbabilityId(duel, cardId)
+		fmt.Println(deck)
+		sqlQuery := fmt.Sprintf("UPDATE probabilities SET duel = '%v', card_id = '%v', deck = %v WHERE id = '%v';", duel, cardId, deck, id)
+		fmt.Println(sqlQuery)
+		runSql(sqlQuery)
 	}
 }
