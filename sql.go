@@ -152,17 +152,3 @@ func initializeProbability(duel, cardId string) {
 	runSql(sqlQuery)
 	assert(probabilityExists(duel, cardId))
 }
-
-func writeDuelTableAsDeck(duelTable DuelTable) {
-	assert(len(duelTable) != 0)
-	values_string := ""
-	for _, entry := range duelTable {
-		duel, cardName, deck := parseDuelTableEntry(entry)
-		id := uuid.NewString()
-		values_string += fmt.Sprintf(",('%v', '%v', '%v', %v)", id, duel, cardName, deck)
-	}
-	values_string = strings.Replace(values_string, ",", "", 1)
-	fmt.Println(values_string)
-	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card, deck) VALUES %v;", values_string)
-	runSql(sqlQuery)
-}

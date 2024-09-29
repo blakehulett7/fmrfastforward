@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
@@ -62,7 +65,7 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 	return wikiSlices
 }
 
-func getDuelTables(deckslice []string) DuelTable {
+func getDuelTable(deckslice []string) DuelTable {
 	assert(len(deckslice) != 0)
 	duelTable := DuelTable{}
 	for _, line := range deckslice {
@@ -91,4 +94,16 @@ func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardName string, 
 	assert(cardName != "")
 	assert(probability != 0)
 	return duel, cardName, probability
+}
+
+func parse_deck_table(duelTable DuelTable) {
+	assert(len(duelTable) != 0)
+	values_string := ""
+	for _, entry := range duelTable {
+		duel, cardName, deck := parseDuelTableEntry(entry)
+		id := uuid.NewString()
+		values_string += fmt.Sprintf(",('%v', '%v', '%v', %v)", id, duel, cardName, deck)
+	}
+	values_string = strings.Replace(values_string, ",", "", 1)
+	fmt.Println(values_string)
 }
