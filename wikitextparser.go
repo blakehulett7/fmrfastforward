@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -62,6 +63,24 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 	}
 	assert(len(wikiSlices) != 0)
 	return wikiSlices
+}
+
+func split_by_table(wikiSection WikiSection) []WikiSection {
+	assert(len(wikiSection) != 0)
+	indices := []int{}
+	fmt.Println(wikiSection)
+	for idx, line := range wikiSection {
+		if !strings.HasPrefix(line, "|") {
+			continue
+		}
+		if strings.HasPrefix(line, "| n") {
+			continue
+		}
+		indices = append(indices, idx)
+	}
+	assert(len(indices) == 3) // These are the 3 possible drop table sections, has to be 3
+	fmt.Println(indices)
+	return nil
 }
 
 func getDuelTable(deckslice []string) DuelTable {

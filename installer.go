@@ -160,8 +160,14 @@ func buildProbabilitiesTable() {
 		duelTable := getDuelTable(duelText)
 		entries = append(entries, parse_deck_table(duelTable)...)
 	}
-	fmt.Println(entries)
-	//fmt.Println(splitDuels(dropsection))
+	drop_text_by_duel := splitByDuels(dropsection)
+	for _, drop_text := range drop_text_by_duel {
+		duel := strings.TrimSpace(strings.ReplaceAll(drop_text[0], "===", ""))
+		drop_table := split_by_table(drop_text)
+		if drop_table != nil {
+		}
+		fmt.Println(duel)
+	}
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
