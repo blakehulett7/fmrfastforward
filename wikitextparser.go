@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -96,14 +95,18 @@ func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardName string, 
 	return duel, cardName, probability
 }
 
-func parse_deck_table(duelTable DuelTable) {
+func parse_deck_table(duelTable DuelTable) []Probability {
 	assert(len(duelTable) != 0)
-	values_string := ""
+	probabilities := []Probability{}
 	for _, entry := range duelTable {
 		duel, cardName, deck := parseDuelTableEntry(entry)
 		id := uuid.NewString()
-		values_string += fmt.Sprintf(",('%v', '%v', '%v', %v)", id, duel, cardName, deck)
+		probabilities = append(probabilities, Probability{
+			Id:   id,
+			Duel: duel,
+			Card: cardName,
+			Deck: deck,
+		})
 	}
-	values_string = strings.Replace(values_string, ",", "", 1)
-	fmt.Println(values_string)
+	return probabilities
 }

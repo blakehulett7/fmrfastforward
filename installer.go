@@ -153,13 +153,14 @@ func buildProbabilitiesTable() {
 	decksection, dropsection := splitWikitext(wikitext)
 	assert(len(decksection) != 0)
 	assert(len(dropsection) != 0)
-	fmt.Println(decksection)
 	deckTextByDuel := splitByDuels(decksection)
 	assert(len(deckTextByDuel) != 0)
+	entries := []Probability{}
 	for _, duelText := range deckTextByDuel {
 		duelTable := getDuelTable(duelText)
-		parse_deck_table(duelTable)
+		entries = append(entries, parse_deck_table(duelTable)...)
 	}
+	fmt.Println(entries)
 	//fmt.Println(splitDuels(dropsection))
 	/*
 		for key, value := range themap {

@@ -16,9 +16,9 @@ type Card struct {
 }
 
 type Probability struct {
-	Id     string
-	Duel   string
-	CardId string
+	Id   string
+	Duel string
+	Card string
 
 	Deck  int
 	SaPow int
