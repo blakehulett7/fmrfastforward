@@ -45,7 +45,9 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 		if strings.HasPrefix(normalized, "==Dialogue") {
 			dialogueIdx = idx
 			deckSlice := wikitextslice[deckIdx:dropIdx]
+			assert(len(deckSlice) != 0)
 			dropSlice := wikitextslice[dropIdx:dialogueIdx]
+			assert(len(dropSlice) != 0)
 			return deckSlice, dropSlice
 		}
 		deckSlice := wikitextslice[deckIdx:dropIdx] // This
@@ -117,6 +119,9 @@ func split_by_table(wikiSection WikiSection) (sapow_text, satec_text, bcd_text W
 		}
 		panic("We should never get here, something went wrong separating drop text by table")
 	}
+	assert(len(sapow_text) != 0)
+	assert(len(satec_text) != 0)
+	assert(len(bcd_text) != 0)
 	return sapow_text, satec_text, bcd_text
 }
 
@@ -127,18 +132,25 @@ func parse_entry_text(line string) (string, int) {
 	if err != nil {
 		panic("Couldn't convert rate to an int type, something is wrong")
 	}
+	assert(values[0] != "")
+	assert(rate != 0)
 	return strings.TrimSpace(values[0]), rate
 }
 
 func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
+	assert(len(deck_text_by_duel) != 0)
 	entries := []Probability{}
 	for _, duel_text := range deck_text_by_duel {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
+		assert(duel != "")
+		assert(!strings.Contains(duel, "="))
 		for _, line := range duel_text {
 			if !strings.Contains(line, ";") {
 				continue
 			}
 			card, rate := parse_entry_text(line)
+			assert(card != "")
+			assert(rate != 0)
 			id := uuid.NewString()
 			entry := Probability{
 				Id:   id,
@@ -149,6 +161,7 @@ func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
 			entries = append(entries, entry)
 		}
 	}
+	assert(len(entries) != 0)
 	return entries
 }
 
@@ -160,6 +173,7 @@ func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd
 	for _, duel_text := range drop_text {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
 		assert(duel != "")
+		assert(!strings.Contains(duel, "="))
 		sapow_text, satec_text, bcd_text := split_by_table(duel_text)
 		for _, line := range sapow_text {
 			if !strings.Contains(line, ";") {
@@ -207,5 +221,8 @@ func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd
 			bcd_entries = append(bcd_entries, entry)
 		}
 	}
+	assert(len(sapow_entries) != 0)
+	assert(len(satec_entries) != 0)
+	assert(len(bcd_entries) != 0)
 	return sapow_entries, satec_entries, bcd_entries
 }
