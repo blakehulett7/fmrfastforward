@@ -20,7 +20,7 @@ func parse_wikitext(wikitext string) (deck_entries []Probability) {
 	deck_entries = parse_deck_text(deckText)
 	drop_text := splitByDuels(dropsection)
 	assert(len(drop_text) == len(deckText))
-	parse_drop_text(drop_text)
+	fmt.Println(parse_drop_text(drop_text))
 	return deck_entries
 }
 
@@ -212,15 +212,56 @@ func parse_drop_table(drop_table WikiSection) [][2]string {
 	return drop_table_entries
 }
 
-func parse_drop_text(drop_text []WikiSection) []Probability {
+func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd_entries []Probability) {
 	assert(len(drop_text) != 0)
-	entries := []Probability{}
+	sapow_entries = []Probability{}
+	satec_entries = []Probability{}
+	bcd_entries = []Probability{}
 	for _, duel_text := range drop_text {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
 		fmt.Println(duel)
-		fmt.Println(split_by_table(duel_text))
+		sapow_text, satec_text, bcd_text := split_by_table(duel_text)
+		for _, line := range sapow_text {
+			if !strings.Contains(line, ";") {
+				continue
+			}
+			card, rate := parse_entry_text(line)
+			entry := Probability{
+				Id:   uuid.NewString(),
+				Duel: duel,
+				Card: card,
+				Rate: rate,
+			}
+			sapow_entries = append(sapow_entries, entry)
+		}
+		for _, line := range satec_text {
+			if !strings.Contains(line, ";") {
+				continue
+			}
+			card, rate := parse_entry_text(line)
+			entry := Probability{
+				Id:   uuid.NewString(),
+				Duel: duel,
+				Card: card,
+				Rate: rate,
+			}
+			satec_entries = append(satec_entries, entry)
+		}
+		for _, line := range bcd_text {
+			if !strings.Contains(line, ";") {
+				continue
+			}
+			card, rate := parse_entry_text(line)
+			entry := Probability{
+				Id:   uuid.NewString(),
+				Duel: duel,
+				Card: card,
+				Rate: rate,
+			}
+			bcd_entries = append(bcd_entries, entry)
+		}
 	}
-	return entries
+	return sapow_entries, satec_entries, bcd_entries
 }
 
 /*
