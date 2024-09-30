@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func parse_wikitext(wikitext string) (deck_entries []Probability) {
+func parse_wikitext(wikitext string) (deck_entries, sapow_entries, satec_entries, bcd_entries []Probability) {
 	assert(wikitext != "")
 	decksection, dropsection := splitWikitext(wikitext)
 	assert(len(decksection) != 0)
@@ -20,8 +20,8 @@ func parse_wikitext(wikitext string) (deck_entries []Probability) {
 	deck_entries = parse_deck_text(deckText)
 	drop_text := splitByDuels(dropsection)
 	assert(len(drop_text) == len(deckText))
-	fmt.Println(parse_drop_text(drop_text))
-	return deck_entries
+	sapow_entries, satec_entries, bcd_entries = parse_drop_text(drop_text)
+	return deck_entries, sapow_entries, satec_entries, bcd_entries
 }
 
 func read_character_data() CharactersQuery {
@@ -131,7 +131,7 @@ func split_by_table(wikiSection WikiSection) (sapow_text, satec_text, bcd_text W
 			bcd_text = section
 			continue
 		}
-		panic("We should never get here, something went wrong seperating drop text by table")
+		panic("We should never get here, something went wrong separating drop text by table")
 	}
 	return sapow_text, satec_text, bcd_text
 }
