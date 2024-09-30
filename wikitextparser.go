@@ -199,19 +199,6 @@ func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
 	return entries
 }
 
-func parse_drop_table(drop_table WikiSection) [][2]string {
-	drop_table_entries := [][2]string{}
-	for _, line := range drop_table[1:] {
-		if !strings.Contains(line, ";") {
-			continue
-		}
-		values := strings.Split(line, ";")
-		assert(len(values) == 2)
-		drop_table_entries = append(drop_table_entries, [2]string{strings.TrimSpace(values[0]), strings.TrimSpace(values[1])})
-	}
-	return drop_table_entries
-}
-
 func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd_entries []Probability) {
 	assert(len(drop_text) != 0)
 	sapow_entries = []Probability{}
