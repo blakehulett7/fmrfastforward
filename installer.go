@@ -141,18 +141,6 @@ func buildProbabilitiesTable() {
 	wikitext := characterPages["19384"].Revisions[0].Body
 	parse_wikitext(wikitext)
 	/*
-		drop_text_by_duel := splitByDuels(dropsection)
-		for _, drop_text := range drop_text_by_duel {
-			duel := strings.TrimSpace(strings.ReplaceAll(drop_text[0], "===", ""))
-			fmt.Println(duel)
-			drop_text_by_table := split_by_table(drop_text)
-			sapow_table, satec_table, bcd_table := drop_tables[0], drop_tables[1], drop_tables[2]
-			parse_sapow_table(sapow_table, duel)
-			parse_satec_table(satec_table, duel)
-			parse_bcd_table(bcd_table, duel)
-		}
-	*/
-	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
 				fmt.Println(strings.ToUpper(value.Title))
