@@ -18,11 +18,9 @@ func parse_wikitext(wikitext string) (deck_entries []Probability) {
 	deckText := splitByDuels(decksection)
 	assert(len(deckText) != 0)
 	deck_entries = parse_deck_text(deckText)
-	drop_text_by_duel := splitByDuels(dropsection)
-	fmt.Println(drop_text_by_duel)
-	//assert(len(drop_text_by_duel) != 0)
-	//entries := []Probability{}
-	//parse_drop_text(drop_text_by_duel)
+	drop_text := splitByDuels(dropsection)
+	assert(len(drop_text) == len(deckText))
+	parse_drop_text(drop_text)
 	return deck_entries
 }
 
@@ -98,7 +96,7 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 	return wikiSlices
 }
 
-func split_by_table(wikiSection WikiSection) []WikiSection {
+func split_by_table(wikiSection WikiSection) (sapow_text, satec_text, bcd_text WikiSection) {
 	assert(len(wikiSection) != 0)
 	indices := []int{}
 	for idx, line := range wikiSection {
@@ -120,7 +118,22 @@ func split_by_table(wikiSection WikiSection) []WikiSection {
 		sections = append(sections, wikiSection[indices[idx]:indices[idx+1]])
 	}
 	assert(len(sections) == 3)
-	return sections
+	for _, section := range sections {
+		if strings.HasPrefix(section[0], "| pow") {
+			sapow_text = section
+			continue
+		}
+		if strings.HasPrefix(section[0], "| tec") {
+			satec_text = section
+			continue
+		}
+		if strings.HasPrefix(section[0], "| bcd") {
+			bcd_text = section
+			continue
+		}
+		panic("We should never get here, something went wrong seperating drop text by table")
+	}
+	return sapow_text, satec_text, bcd_text
 }
 
 func getDuelTable(deckslice []string) DuelTable {
@@ -154,22 +167,6 @@ func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardName string, 
 	return duel, cardName, probability
 }
 
-func parse_deck_table(duelTable DuelTable) []Probability {
-	assert(len(duelTable) != 0)
-	probabilities := []Probability{}
-	for _, entry := range duelTable {
-		duel, cardName, deck := parseDuelTableEntry(entry)
-		id := uuid.NewString()
-		probabilities = append(probabilities, Probability{
-			Id:   id,
-			Duel: duel,
-			Card: cardName,
-			Deck: deck,
-		})
-	}
-	return probabilities
-}
-
 func parse_entry_text(line string) (string, int) {
 	assert(strings.Contains(line, ";"))
 	values := strings.Split(line, ";")
@@ -194,7 +191,7 @@ func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
 				Id:   id,
 				Duel: duel,
 				Card: card,
-				Deck: rate,
+				Rate: rate,
 			}
 			entries = append(entries, entry)
 		}
@@ -219,26 +216,9 @@ func parse_drop_text(drop_text []WikiSection) []Probability {
 	assert(len(drop_text) != 0)
 	entries := []Probability{}
 	for _, duel_text := range drop_text {
-		fmt.Println(duel_text)
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
-		duel_text_by_table := split_by_table(duel_text)
-		for _, drop_text := range duel_text_by_table {
-			if strings.HasPrefix(drop_text[0], "| pow") {
-				values := parse_drop_table(drop_text)
-				fmt.Println(values)
-				continue
-			}
-			if strings.HasPrefix(drop_text[0], "| tec") {
-				fmt.Println("satec")
-				continue
-			}
-			if strings.HasPrefix(drop_text[0], "| bcd") {
-				fmt.Println("bcd")
-				continue
-			}
-			panic("We should not get here, something is wrong parsing drop text")
-		}
 		fmt.Println(duel)
+		fmt.Println(split_by_table(duel_text))
 	}
 	return entries
 }

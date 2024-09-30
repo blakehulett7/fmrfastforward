@@ -19,11 +19,7 @@ type Probability struct {
 	Id   string
 	Duel string
 	Card string
-
-	Deck  int
-	SaPow int
-	SaTec int
-	Bcd   int
+	Rate int
 }
 
 type CharactersPageJSON struct {
