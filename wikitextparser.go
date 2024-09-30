@@ -24,7 +24,7 @@ func parse_wikitext(wikitext string) {
 		duelTable := getDuelTable(duelText)
 		entries = append(entries, parse_deck_table(duelTable)...)
 	}
-	fmt.Println(entries)
+	parse_drop_text(drop_text_by_duel)
 }
 
 func read_character_data() CharactersQuery {
@@ -169,6 +169,46 @@ func parse_deck_table(duelTable DuelTable) []Probability {
 		})
 	}
 	return probabilities
+}
+
+func parse_drop_table(drop_table WikiSection) (card string, rate int) {
+	for _, line := range drop_table[1:] {
+		values := strings.Split(line, ";")
+		assert(len(values) == 2)
+		card := strings.TrimSpace(values[0])
+		rate, err := strconv.Atoi(strings.TrimSpace(values[1]))
+		if err != nil {
+			panic(err)
+		}
+		assert(card != "")
+		assert(rate > 0)
+	}
+}
+
+func parse_drop_text(drop_text []WikiSection) []Probability {
+	assert(len(drop_text) != 0)
+	entries := []Probability{}
+	for _, duel_text := range drop_text {
+		fmt.Println(duel_text)
+		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
+		duel_text_by_table := split_by_table(duel_text)
+		for _, drop_text := range duel_text_by_table {
+			if strings.HasPrefix(drop_text[0], "| pow") {
+				continue
+			}
+			if strings.HasPrefix(drop_text[0], "| tec") {
+				fmt.Println("satec")
+				continue
+			}
+			if strings.HasPrefix(drop_text[0], "| bcd") {
+				fmt.Println("bcd")
+				continue
+			}
+			panic("We should not get here, something is wrong parsing drop text")
+		}
+		fmt.Println(duel)
+	}
+	return entries
 }
 
 /*
