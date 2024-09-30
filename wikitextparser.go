@@ -19,6 +19,9 @@ func parse_wikitext(wikitext string) (deck_entries, sapow_entries, satec_entries
 	drop_text := splitByDuels(dropsection)
 	assert(len(drop_text) == len(deckText))
 	sapow_entries, satec_entries, bcd_entries = parse_drop_text(drop_text)
+	assert(len(sapow_entries) != 0)
+	assert(len(satec_entries) != 0)
+	assert(len(bcd_entries) != 0)
 	return deck_entries, sapow_entries, satec_entries, bcd_entries
 }
 
