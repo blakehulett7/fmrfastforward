@@ -16,15 +16,15 @@ func parse_wikitext(wikitext string) {
 	assert(len(decksection) != 0)
 	assert(len(dropsection) != 0)
 	deckTextByDuel := splitByDuels(decksection)
-	drop_text_by_duel := splitByDuels(dropsection)
+	//_, drop_text_by_duel := splitByDuels(dropsection)
 	assert(len(deckTextByDuel) != 0)
-	assert(len(drop_text_by_duel) != 0)
+	//assert(len(drop_text_by_duel) != 0)
 	entries := []Probability{}
 	for _, duelText := range deckTextByDuel {
 		duelTable := getDuelTable(duelText)
 		entries = append(entries, parse_deck_table(duelTable)...)
 	}
-	parse_drop_text(drop_text_by_duel)
+	//parse_drop_text(drop_text_by_duel)
 }
 
 func read_character_data() CharactersQuery {
@@ -85,7 +85,7 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 		indices = append(indices, idx)
 	}
 	if len(indices) == 0 {
-		return []WikiSection{wikiSection}
+		panic("Couldn't split by duels")
 	}
 	wikiSlices := []WikiSection{}
 	for idx := range indices {
@@ -171,18 +171,17 @@ func parse_deck_table(duelTable DuelTable) []Probability {
 	return probabilities
 }
 
-func parse_drop_table(drop_table WikiSection) (card string, rate int) {
+func parse_drop_table(drop_table WikiSection) [][2]string {
+	drop_table_entries := [][2]string{}
 	for _, line := range drop_table[1:] {
+		if !strings.Contains(line, ";") {
+			continue
+		}
 		values := strings.Split(line, ";")
 		assert(len(values) == 2)
-		card := strings.TrimSpace(values[0])
-		rate, err := strconv.Atoi(strings.TrimSpace(values[1]))
-		if err != nil {
-			panic(err)
-		}
-		assert(card != "")
-		assert(rate > 0)
+		drop_table_entries = append(drop_table_entries, [2]string{strings.TrimSpace(values[0]), strings.TrimSpace(values[1])})
 	}
+	return drop_table_entries
 }
 
 func parse_drop_text(drop_text []WikiSection) []Probability {
@@ -194,6 +193,8 @@ func parse_drop_text(drop_text []WikiSection) []Probability {
 		duel_text_by_table := split_by_table(duel_text)
 		for _, drop_text := range duel_text_by_table {
 			if strings.HasPrefix(drop_text[0], "| pow") {
+				values := parse_drop_table(drop_text)
+				fmt.Println(values)
 				continue
 			}
 			if strings.HasPrefix(drop_text[0], "| tec") {
