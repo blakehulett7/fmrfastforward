@@ -60,3 +60,5 @@ type DuelText []string
 type DuelTableEntry [3]string
 
 type DuelTable []DuelTableEntry
+
+type DeckText []string
