@@ -136,21 +136,6 @@ func split_by_table(wikiSection WikiSection) (sapow_text, satec_text, bcd_text W
 	return sapow_text, satec_text, bcd_text
 }
 
-func getDuelTable(deckslice []string) DuelTable {
-	assert(len(deckslice) != 0)
-	duelTable := DuelTable{}
-	for _, line := range deckslice {
-		duel := strings.TrimSpace(strings.ReplaceAll(deckslice[0], "===", ""))
-		if strings.Contains(line, ";") {
-			entryValues := strings.Split(line, ";")
-			cardName := strings.TrimSpace(entryValues[0])
-			probability := strings.TrimSpace(entryValues[1])
-			duelTable = append(duelTable, [3]string{duel, cardName, probability})
-		}
-	}
-	return duelTable
-}
-
 func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardName string, probability int) {
 	for _, value := range duelTableEntry {
 		assert(value != "")
