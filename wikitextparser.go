@@ -219,7 +219,6 @@ func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd
 	bcd_entries = []Probability{}
 	for _, duel_text := range drop_text {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
-		fmt.Println(duel)
 		sapow_text, satec_text, bcd_text := split_by_table(duel_text)
 		for _, line := range sapow_text {
 			if !strings.Contains(line, ";") {
