@@ -10,18 +10,20 @@ import (
 	"github.com/google/uuid"
 )
 
-func parse_wikitext(wikitext string) {
+func parse_wikitext(wikitext string) (deck_entries []Probability) {
 	assert(wikitext != "")
 	decksection, dropsection := splitWikitext(wikitext)
 	assert(len(decksection) != 0)
 	assert(len(dropsection) != 0)
 	deckText := splitByDuels(decksection)
-	//_, drop_text_by_duel := splitByDuels(dropsection)
 	assert(len(deckText) != 0)
+	deck_entries = parse_deck_text(deckText)
+	drop_text_by_duel := splitByDuels(dropsection)
+	fmt.Println(drop_text_by_duel)
 	//assert(len(drop_text_by_duel) != 0)
 	//entries := []Probability{}
-	parse_deck_text(deckText)
 	//parse_drop_text(drop_text_by_duel)
+	return deck_entries
 }
 
 func read_character_data() CharactersQuery {
@@ -168,6 +170,16 @@ func parse_deck_table(duelTable DuelTable) []Probability {
 	return probabilities
 }
 
+func parse_entry_text(line string) (string, int) {
+	assert(strings.Contains(line, ";"))
+	values := strings.Split(line, ";")
+	rate, err := strconv.Atoi(strings.TrimSpace(values[1]))
+	if err != nil {
+		panic("Couldn't convert rate to an int type, something is wrong")
+	}
+	return strings.TrimSpace(values[0]), rate
+}
+
 func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
 	entries := []Probability{}
 	for _, duel_text := range deck_text_by_duel {
@@ -188,16 +200,6 @@ func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
 		}
 	}
 	return entries
-}
-
-func parse_entry_text(line string) (string, int) {
-	assert(strings.Contains(line, ";"))
-	values := strings.Split(line, ";")
-	rate, err := strconv.Atoi(strings.TrimSpace(values[1]))
-	if err != nil {
-		panic("Couldn't convert rate to an int type, something is wrong")
-	}
-	return strings.TrimSpace(values[0]), rate
 }
 
 func parse_drop_table(drop_table WikiSection) [][2]string {
