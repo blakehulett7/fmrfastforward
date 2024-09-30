@@ -136,22 +136,6 @@ func split_by_table(wikiSection WikiSection) (sapow_text, satec_text, bcd_text W
 	return sapow_text, satec_text, bcd_text
 }
 
-func parseDuelTableEntry(duelTableEntry DuelTableEntry) (duel, cardName string, probability int) {
-	for _, value := range duelTableEntry {
-		assert(value != "")
-	}
-	duel = duelTableEntry[0]
-	cardName = duelTableEntry[1]
-	probability, err := strconv.Atoi(duelTableEntry[2])
-	if err != nil {
-		panic(err)
-	}
-	assert(duel != "")
-	assert(cardName != "")
-	assert(probability != 0)
-	return duel, cardName, probability
-}
-
 func parse_entry_text(line string) (string, int) {
 	assert(strings.Contains(line, ";"))
 	values := strings.Split(line, ";")
@@ -234,14 +218,3 @@ func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd
 	}
 	return sapow_entries, satec_entries, bcd_entries
 }
-
-/*
-func parse_sapow_table(drop_table DuelTable, duel string) {
-	assert(len(drop_table) != 0)
-	assert(duel != "")
-	probabilities := []Probability{}
-	for _, entry := range drop_table {
-
-	}
-}
-*/
