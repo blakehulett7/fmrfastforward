@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -22,21 +20,6 @@ func parse_wikitext(wikitext string) (deck_entries, sapow_entries, satec_entries
 	assert(len(drop_text) == len(deckText))
 	sapow_entries, satec_entries, bcd_entries = parse_drop_text(drop_text)
 	return deck_entries, sapow_entries, satec_entries, bcd_entries
-}
-
-func read_character_data() CharactersQuery {
-	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
-	if err != nil {
-		fmt.Println("Couldn't load the character json data from disk, error:", err)
-		panic(err)
-	}
-	charactersQuery := CharactersQuery{}
-	err = json.Unmarshal(data, &charactersQuery)
-	if err != nil {
-		fmt.Println("Couldn't decode the character json data on the disk, error:", err)
-		panic(err)
-	}
-	return charactersQuery
 }
 
 func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
@@ -69,6 +52,7 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 		dropSlice := wikitextslice[dropIdx:]        // Doesn't
 		return deckSlice, dropSlice                 // Look
 	}
+	fmt.Println("**")
 	panic("Should never get here, something went wrong parsing the wikitext!") // Right?
 }
 
