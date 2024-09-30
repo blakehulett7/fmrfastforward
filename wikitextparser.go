@@ -65,11 +65,11 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 			dropSlice := wikitextslice[dropIdx:dialogueIdx]
 			return deckSlice, dropSlice
 		}
-		deckSlice := wikitextslice[deckIdx:dropIdx]
-		dropSlice := wikitextslice[dropIdx:]
-		return deckSlice, dropSlice
+		deckSlice := wikitextslice[deckIdx:dropIdx] // This
+		dropSlice := wikitextslice[dropIdx:]        // Doesn't
+		return deckSlice, dropSlice                 // Look
 	}
-	panic("Should never get here, something went wrong parsing the wikitext!")
+	panic("Should never get here, something went wrong parsing the wikitext!") // Right?
 }
 
 func splitByDuels(wikiSection WikiSection) []WikiSection {
