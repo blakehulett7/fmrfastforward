@@ -2,26 +2,43 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
 )
 
-func parse_wikitext(wikitext string) (deck_entries, sapow_entries, satec_entries, bcd_entries []Probability) {
-	assert(wikitext != "")
-	decksection, dropsection := splitWikitext(wikitext)
-	assert(len(decksection) != 0)
-	assert(len(dropsection) != 0)
-	deckText := splitByDuels(decksection)
-	assert(len(deckText) != 0)
-	deck_entries = parse_deck_text(deckText)
-	drop_text := splitByDuels(dropsection)
-	assert(len(drop_text) == len(deckText))
-	sapow_entries, satec_entries, bcd_entries = parse_drop_text(drop_text)
-	assert(len(sapow_entries) != 0)
-	assert(len(satec_entries) != 0)
-	assert(len(bcd_entries) != 0)
+func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec_entries, bcd_entries []Probability) {
+	characters_to_remove := []string{
+		"Kemo (FMR)",
+		"Card shop owner (FMR)",
+		"Duel Master K",
+	}
+	for _, value := range wikimap {
+		if slices.Contains(characters_to_remove, value.Title) {
+			continue
+		}
+		wikitext := value.Revisions[0].Body
+		fmt.Println(wikitext)
+		assert(wikitext != "")
+		decksection, dropsection := splitWikitext(wikitext)
+		assert(len(decksection) != 0)
+		assert(len(dropsection) != 0)
+		deckText := splitByDuels(decksection)
+		assert(len(deckText) != 0)
+		new_deck_entries := parse_deck_text(deckText)
+		drop_text := splitByDuels(dropsection)
+		assert(len(drop_text) == len(deckText))
+		new_sapow_entries, new_satec_entries, new_bcd_entries := parse_drop_text(drop_text)
+		assert(len(sapow_entries) != 0)
+		assert(len(satec_entries) != 0)
+		assert(len(bcd_entries) != 0)
+		deck_entries = append(deck_entries, new_deck_entries...)
+		sapow_entries = append(sapow_entries, new_sapow_entries...)
+		satec_entries = append(satec_entries, new_satec_entries...)
+		bcd_entries = append(bcd_entries, new_bcd_entries...)
+	}
 	return deck_entries, sapow_entries, satec_entries, bcd_entries
 }
 
@@ -71,7 +88,7 @@ func splitByDuels(wikiSection WikiSection) []WikiSection {
 		indices = append(indices, idx)
 	}
 	if len(indices) == 0 {
-		panic("Couldn't split by duels")
+		return []WikiSection{wikiSection}
 	}
 	wikiSlices := []WikiSection{}
 	for idx := range indices {
