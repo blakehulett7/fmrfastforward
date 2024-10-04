@@ -6,9 +6,9 @@ import (
 	"os"
 )
 
-func assert(condition bool) {
+func assert(condition bool, message string) {
 	if !condition {
-		panic("Get wrecked fool!")
+		panic(message)
 	}
 }
 
