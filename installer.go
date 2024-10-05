@@ -35,7 +35,7 @@ func getFmrData() {
 	}
 	if !fileExists(storageDirectory + "/database.db") {
 		initializeDB()
-		assert(fileExists(storageDirectory+"/database.db"), "database not properly initialized")
+		assert(fileExists(storageDirectory+"/database.db"), "database file not present")
 		assert(tableExists("probabilities"), "failed to initialize probabilities table")
 	}
 	if !tableExists("cards") {

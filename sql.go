@@ -72,7 +72,7 @@ func probabilityExists(duel, cardId string) bool {
 }
 
 func getCardId(cardName string) string {
-	assert(cardExists(cardName))
+	assert(cardExists(cardName), "can't get an id for a card not yet in the db")
 	sqlQuery := fmt.Sprintf("SELECT id FROM cards WHERE name = '%v';", cardName)
 	data, err := outputSql(sqlQuery)
 	if err != nil {
@@ -83,7 +83,7 @@ func getCardId(cardName string) string {
 }
 
 func getProbabilityId(duel, cardId string) string {
-	assert(probabilityExists(duel, cardId))
+	assert(probabilityExists(duel, cardId), "can't get an id for a probability not yet in the db")
 	sqlQuery := fmt.Sprintf("SELECT id FROM probabilities WHERE duel = '%v' AND card_id = '%v';", duel, cardId)
 	data, err := outputSql(sqlQuery)
 	if err != nil {
@@ -93,7 +93,7 @@ func getProbabilityId(duel, cardId string) string {
 }
 
 func initializeDB() {
-	assert(!fileExists(storageDirectory + "/database.db"))
+	assert(!fileExists(storageDirectory+"/database.db"), "db file already exists...")
 	sqlQuery := `
 CREATE TABLE probabilities (
     id TEXT PRIMARY KEY,
@@ -106,11 +106,11 @@ CREATE TABLE probabilities (
     );
 `
 	runSql(sqlQuery)
-	assert(tableExists("probabilities"))
+	assert(tableExists("probabilities"), "db file not initialized properly")
 }
 
 func initializeCardsDB() {
-	assert(!tableExists("cards"))
+	assert(!tableExists("cards"), "cards table already exists, shouldn't be calling this")
 	sqlQuery := `
 CREATE TABLE cards (
     id TEXT PRIMARY KEY,
@@ -120,11 +120,11 @@ CREATE TABLE cards (
     );
     `
 	runSql(sqlQuery)
-	assert(tableExists("cards"))
+	assert(tableExists("cards"), "cards table failed to initialize properly")
 }
 
 func initializeFusionsDB() {
-	assert(!tableExists("fusions"))
+	assert(!tableExists("fusions"), "fusions table already exists...")
 	sqlQuery := `
 CREATE TABLE fusions (
     id TEXT PRIMARY KEY,
@@ -134,21 +134,21 @@ CREATE TABLE fusions (
     material_2 TEXT,
     FOREIGN KEY(card_id, used_in, material_1, material_2) REFERENCES cards(id, id, id, id));`
 	runSql(sqlQuery)
-	assert(tableExists("fusions"))
+	assert(tableExists("fusions"), "fusions table failed to properly intialize")
 }
 
 func initializeCard(cardName string) {
-	assert(!cardExists(cardName))
+	assert(!cardExists(cardName), "card already present in the db")
 	id := uuid.NewString()
 	sqlQuery := fmt.Sprintf("INSERT INTO cards(id, name) VALUES ('%v', '%v');", id, cardName)
 	runSql(sqlQuery)
-	assert(cardExists(cardName))
+	assert(cardExists(cardName), "card was not saved to the db properly")
 }
 
 func initializeProbability(duel, cardId string) {
-	assert(!probabilityExists(duel, cardId))
+	assert(!probabilityExists(duel, cardId), "probability already present in the db")
 	id := uuid.NewString()
 	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card_id) VALUES('%v', '%v', '%v');", id, duel, cardId)
 	runSql(sqlQuery)
-	assert(probabilityExists(duel, cardId))
+	assert(probabilityExists(duel, cardId), "probability was not saved to the db properly")
 }
