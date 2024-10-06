@@ -14,8 +14,16 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		"Kemo (FMR)",
 		"Card shop owner (FMR)",
 		"Duel Master K",
+		"Sadin",
+		"Servant",
+		"Joey (FMR)",
+		"Tea Gardner (FMR)",
+		"Yugi (FMR)",
+		"Prince (FMR)",
+		"",
 	}
 	for _, value := range wikimap {
+		fmt.Println(value.Title)
 		if slices.Contains(characters_to_remove, value.Title) {
 			continue
 		}
@@ -31,9 +39,9 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		drop_text := splitByDuels(dropsection)
 		assert(len(drop_text) == len(deckText), "there should be the same number of duels for the deck and drops sections")
 		new_sapow_entries, new_satec_entries, new_bcd_entries := parse_drop_text(drop_text)
-		assert(len(sapow_entries) != 0, "didn't get sapow drop rates")
-		assert(len(satec_entries) != 0, "didn't get satec drop rates")
-		assert(len(bcd_entries) != 0, "didn't get bcd drop rates")
+		assert(len(new_sapow_entries) != 0, "didn't get sapow drop rates")
+		assert(len(new_satec_entries) != 0, "didn't get satec drop rates")
+		assert(len(new_bcd_entries) != 0, "didn't get bcd drop rates")
 		deck_entries = append(deck_entries, new_deck_entries...)
 		sapow_entries = append(sapow_entries, new_sapow_entries...)
 		satec_entries = append(satec_entries, new_satec_entries...)
@@ -163,7 +171,6 @@ func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
 	for _, duel_text := range deck_text_by_duel {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
 		assert(duel != "", "shouldn't find a blank duel section")
-		assert(!strings.Contains(duel, "="), "no = character present to find the duels with")
 		for _, line := range duel_text {
 			if !strings.Contains(line, ";") {
 				continue
@@ -193,7 +200,6 @@ func parse_drop_text(drop_text []WikiSection) (sapow_entries, satec_entries, bcd
 	for _, duel_text := range drop_text {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
 		assert(duel != "", "shouldn't find a blank duel section")
-		assert(!strings.Contains(duel, "="), "no = character present to find duels with")
 		sapow_text, satec_text, bcd_text := split_by_table(duel_text)
 		for _, line := range sapow_text {
 			if !strings.Contains(line, ";") {
