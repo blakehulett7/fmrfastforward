@@ -50,6 +50,10 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		satec_entries = append(satec_entries, new_satec_entries...)
 		bcd_entries = append(bcd_entries, new_bcd_entries...)
 	}
+	assert(len(deck_entries) != 0, "we are returning an empty slice of deck entries")
+	assert(len(sapow_entries) != 0, "we are returning an empty slice of sapow entries")
+	assert(len(satec_entries) != 0, "we are returning an empty slice of satec entries")
+	assert(len(bcd_entries) != 0, "we are returning an empty slice of bcd entries")
 	return deck_entries, sapow_entries, satec_entries, bcd_entries
 }
 

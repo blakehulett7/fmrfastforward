@@ -152,3 +152,9 @@ func initializeProbability(duel, cardId string) {
 	runSql(sqlQuery)
 	assert(probabilityExists(duel, cardId), "probability was not saved to the db properly")
 }
+
+func WriteProbabilities(entries []Probability) {
+	for _, entry := range entries {
+		entry
+	}
+}
