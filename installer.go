@@ -138,7 +138,8 @@ func buildProbabilitiesTable() {
 	assert(tableIsEmpty("probabilities"), "probablities table should be empty before this buildProbabilitiesTable function is called")
 	charactersQuery := read_character_data()
 	wikimap := charactersQuery.Query.Pages
-	parse_wikitext(wikimap)
+	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
+
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
