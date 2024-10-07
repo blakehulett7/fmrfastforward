@@ -13,7 +13,6 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 	characters_to_remove := []string{
 		"Kemo (FMR)",
 		"Card shop owner (FMR)",
-		"Duel Master K",
 		"Sadin",
 		"Servant",
 		"Joey (FMR)",
@@ -202,7 +201,9 @@ func parse_deck_text(deck_text_by_duel []WikiSection, duel_title string) []Proba
 			entries = append(entries, entry)
 		}
 	}
-	assert(len(entries) != 0, "no deck table data was parsed")
+	if duel_title != "Duel Master K" {
+		assert(len(entries) != 0, "no deck table data was parsed")
+	}
 	return entries
 }
 
