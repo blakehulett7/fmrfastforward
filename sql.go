@@ -137,6 +137,13 @@ CREATE TABLE fusions (
 	assert(tableExists("fusions"), "fusions table failed to properly intialize")
 }
 
+func initialize_rate_table(table_name string) {
+	assert(!tableExists(table_name), fmt.Sprintf("%v table already exists, should not call this function", table_name))
+	sql_query := fmt.Sprintf("CREATE TABLE %v (id TEXT PRIMARY KEY, duel TEXT, card TEXT, rate INTEGER);", table_name)
+	runSql(sql_query)
+	assert(tableExists(table_name), fmt.Sprintf("failed to initialize the %v table", table_name))
+}
+
 func initializeCard(cardName string) {
 	assert(!cardExists(cardName), "card already present in the db")
 	id := uuid.NewString()
@@ -153,8 +160,10 @@ func initializeProbability(duel, cardId string) {
 	assert(probabilityExists(duel, cardId), "probability was not saved to the db properly")
 }
 
+/*
 func WriteProbabilities(entries []Probability) {
 	for _, entry := range entries {
 		entry
 	}
 }
+*/

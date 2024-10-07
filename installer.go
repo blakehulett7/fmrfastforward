@@ -46,6 +46,9 @@ func getFmrData() {
 		initializeFusionsDB()
 		assert(tableExists("fusions"), "failed to initialize fusions table")
 	}
+	if !tableExists("decks") {
+		initialize_rate_table("decks")
+	}
 	assert(tableIsEmpty("probabilities"), "there is old data in the probablities table")
 	buildProbabilitiesTable()
 }
