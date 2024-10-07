@@ -63,6 +63,10 @@ func getFmrData() {
 		assert(tableExists("bcd"), "failed to initialize bcd table")
 	}
 	assert(tableIsEmpty("probabilities"), "there is old data in the probablities table")
+	assert(tableIsEmpty("decks"), "there is old data in the decks table")
+	assert(tableIsEmpty("sapow"), "there is old data in the sapow table")
+	assert(tableIsEmpty("satec"), "there is old data in the satec table")
+	assert(tableIsEmpty("bcd"), "there is old data in the bcd table")
 	buildProbabilitiesTable()
 }
 
