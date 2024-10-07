@@ -48,6 +48,19 @@ func getFmrData() {
 	}
 	if !tableExists("decks") {
 		initialize_rate_table("decks")
+		assert(tableExists("decks"), "failed to initialize decks table")
+	}
+	if !tableExists("sapow") {
+		initialize_rate_table("sapow")
+		assert(tableExists("sapow"), "failed to initialize sapow table")
+	}
+	if !tableExists("satec") {
+		initialize_rate_table("satec")
+		assert(tableExists("satec"), "failed to initialize satec table")
+	}
+	if !tableExists("bcd") {
+		initialize_rate_table("bcd")
+		assert(tableExists("bcd"), "failed to initialize bcd table")
 	}
 	assert(tableIsEmpty("probabilities"), "there is old data in the probablities table")
 	buildProbabilitiesTable()
