@@ -160,11 +160,13 @@ func initializeProbability(duel, cardId string) {
 	assert(probabilityExists(duel, cardId), "probability was not saved to the db properly")
 }
 
-func WriteProbabilities(entries []Probability) {
+func WriteProbabilities(entries []Probability, table_name string) {
 	values_string := ""
 	for _, entry := range entries {
-		entry_string := fmt.Sprintf(", ('%v', '%v', '%v', %v)", entry.Id, entry.Duel, entry.Card, entry.Rate)
+		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", \"%v\", %v)", entry.Id, entry.Duel, entry.Card, entry.Rate)
 		values_string += entry_string
 	}
-	fmt.Println(values_string)
+	values_string = values_string[2:]
+	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
+	runSql(sql_query)
 }

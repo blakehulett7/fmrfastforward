@@ -159,8 +159,10 @@ func buildProbabilitiesTables() {
 	charactersQuery := read_character_data()
 	wikimap := charactersQuery.Query.Pages
 	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
-	fmt.Println(deck_entries, sapow_entries, satec_entries, bcd_entries)
-	//WriteProbabilities(deck_entries)
+	WriteProbabilities(deck_entries, "decks")
+	WriteProbabilities(sapow_entries, "sapow")
+	WriteProbabilities(satec_entries, "satec")
+	WriteProbabilities(bcd_entries, "bcd")
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
