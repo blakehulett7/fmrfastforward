@@ -168,6 +168,5 @@ func WriteProbabilities(entries []Probability, table_name string) {
 	}
 	values_string = values_string[2:]
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
-	if sql_query == "" {
-	}
+	runSql(sql_query)
 }
