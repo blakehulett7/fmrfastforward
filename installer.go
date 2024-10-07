@@ -63,11 +63,17 @@ func getFmrData() {
 		assert(tableExists("bcd"), "failed to initialize bcd table")
 	}
 	assert(tableIsEmpty("probabilities"), "there is old data in the probablities table")
+	charactersQuery := read_character_data()
+	wikimap := charactersQuery.Query.Pages
+	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
 	assert(tableIsEmpty("decks"), "there is old data in the decks table")
+	WriteProbabilities(deck_entries, "decks")
 	assert(tableIsEmpty("sapow"), "there is old data in the sapow table")
+	WriteProbabilities(sapow_entries, "sapow")
 	assert(tableIsEmpty("satec"), "there is old data in the satec table")
+	WriteProbabilities(satec_entries, "satec")
 	assert(tableIsEmpty("bcd"), "there is old data in the bcd table")
-	buildProbabilitiesTables()
+	WriteProbabilities(bcd_entries, "bcd")
 }
 
 func getFmrCharacters() {
@@ -151,32 +157,4 @@ func getCharacterData(fetchList []string) {
 	}
 	os.WriteFile(storageDirectory+"/characterdata.json", resData, 0777)
 	assert(fileExists(storageDirectory+"/characterdata.json"), "character data was not written properly")
-}
-
-func buildProbabilitiesTables() {
-	assert(fileExists(storageDirectory+"/characterdata.json"), "need to fetch character data first...")
-	assert(tableIsEmpty("probabilities"), "probablities table should be empty before this buildProbabilitiesTable function is called")
-	charactersQuery := read_character_data()
-	wikimap := charactersQuery.Query.Pages
-	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
-	WriteProbabilities(deck_entries, "decks")
-	WriteProbabilities(sapow_entries, "sapow")
-	WriteProbabilities(satec_entries, "satec")
-	WriteProbabilities(bcd_entries, "bcd")
-	/*
-		for key, value := range themap {
-			if len(value.Revisions) == 0 {
-				fmt.Println(strings.ToUpper(value.Title))
-				continue
-			}
-			fmt.Println(strings.TrimSpace(
-				strings.ReplaceAll(
-					value.Title, "(FMR)", "",
-				),
-			),
-				value.Revisions[0].Body,
-			)
-			fmt.Println(key)
-		}
-	*/
 }
