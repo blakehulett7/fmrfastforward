@@ -38,7 +38,7 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		assert(len(dropsection) != 0, "couldn't find a drops section")
 		deckText := splitByDuels(decksection)
 		assert(len(deckText) != 0, "didn't find any duels to parse...")
-		new_deck_entries := parse_deck_text(deckText)
+		new_deck_entries := parse_deck_text(deckText, value.Title)
 		drop_text := splitByDuels(dropsection)
 		assert(len(drop_text) == len(deckText), "there should be the same number of duels for the deck and drops sections")
 		new_sapow_entries, new_satec_entries, new_bcd_entries := parse_drop_text(drop_text)
@@ -171,11 +171,14 @@ func parse_entry_text(line string) (string, int) {
 	return strings.TrimSpace(values[0]), rate
 }
 
-func parse_deck_text(deck_text_by_duel []WikiSection) []Probability {
+func parse_deck_text(deck_text_by_duel []WikiSection, duel_title string) []Probability {
 	assert(len(deck_text_by_duel) != 0, "no deck text to parse")
 	entries := []Probability{}
 	for _, duel_text := range deck_text_by_duel {
 		duel := strings.TrimSpace(strings.ReplaceAll(duel_text[0], "===", ""))
+		if strings.Contains(duel, "=") {
+			duel = duel_title
+		}
 		assert(duel != "", "shouldn't find a blank duel section")
 		for _, line := range duel_text {
 			if !strings.Contains(line, ";") {

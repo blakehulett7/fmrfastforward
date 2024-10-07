@@ -160,10 +160,11 @@ func initializeProbability(duel, cardId string) {
 	assert(probabilityExists(duel, cardId), "probability was not saved to the db properly")
 }
 
-/*
 func WriteProbabilities(entries []Probability) {
+	values_string := ""
 	for _, entry := range entries {
-		entry
+		entry_string := fmt.Sprintf(", ('%v', '%v', '%v', %v)", entry.Id, entry.Duel, entry.Card, entry.Rate)
+		values_string += entry_string
 	}
+	fmt.Println(values_string)
 }
-*/

@@ -67,7 +67,7 @@ func getFmrData() {
 	assert(tableIsEmpty("sapow"), "there is old data in the sapow table")
 	assert(tableIsEmpty("satec"), "there is old data in the satec table")
 	assert(tableIsEmpty("bcd"), "there is old data in the bcd table")
-	buildProbabilitiesTable()
+	buildProbabilitiesTables()
 }
 
 func getFmrCharacters() {
@@ -153,13 +153,14 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory+"/characterdata.json"), "character data was not written properly")
 }
 
-func buildProbabilitiesTable() {
+func buildProbabilitiesTables() {
 	assert(fileExists(storageDirectory+"/characterdata.json"), "need to fetch character data first...")
 	assert(tableIsEmpty("probabilities"), "probablities table should be empty before this buildProbabilitiesTable function is called")
 	charactersQuery := read_character_data()
 	wikimap := charactersQuery.Query.Pages
 	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
 	fmt.Println(deck_entries, sapow_entries, satec_entries, bcd_entries)
+	//WriteProbabilities(deck_entries)
 	/*
 		for key, value := range themap {
 			if len(value.Revisions) == 0 {
