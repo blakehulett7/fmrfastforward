@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -22,6 +23,9 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		"",
 	}
 	for id, value := range wikimap {
+		if value.Title == "Seto (FMR)" {
+			fmt.Println(value.Revisions[0].Body)
+		}
 		if strings.Contains(id, "-") {
 			continue
 		}
@@ -32,6 +36,7 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		assert(wikitext != "", "no wikitext present to parse...")
 		decksection, dropsection := splitWikitext(wikitext)
 		if slices.Contains(decksection, "**") {
+			fmt.Println(value.Title, "couldn't split into a deck and duel section")
 			continue
 		}
 		assert(len(decksection) != 0, "couldn't find a deck section")
@@ -87,7 +92,9 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 		}
 		deckSlice := wikitextslice[deckIdx:dropIdx] // This
 		dropSlice := wikitextslice[dropIdx:]        // Doesn't
-		return deckSlice, dropSlice                 // Look
+		assert(len(deckSlice) != 0, "didn't find a deck section")
+		assert(len(dropSlice) != 0, "didn't find a drop section")
+		return deckSlice, dropSlice // Look
 	}
 	return WikiSection{"**"}, WikiSection{"**"}
 }
