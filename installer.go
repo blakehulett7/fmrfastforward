@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -85,6 +86,13 @@ func getFmrData() {
 	assert(tableIsEmpty("bcd"), "there is old data in the bcd table")
 	WriteProbabilities(bcd_entries, "bcd")
 	assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
+	cards_to_fetch := []string{}
+	for _, entry := range deck_entries {
+		if !slices.Contains(cards_to_fetch, entry.Card) {
+			fmt.Println(entry.Card)
+			cards_to_fetch = append(cards_to_fetch, entry.Card)
+		}
+	}
 }
 
 func getFmrCharacters() {
