@@ -68,12 +68,16 @@ func getFmrData() {
 	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
 	assert(tableIsEmpty("decks"), "there is old data in the decks table")
 	WriteProbabilities(deck_entries, "decks")
+	assert(!tableIsEmpty("decks"), "decks table not successfully written")
 	assert(tableIsEmpty("sapow"), "there is old data in the sapow table")
 	WriteProbabilities(sapow_entries, "sapow")
+	assert(!tableIsEmpty("sapow"), "sapow table not successfully written")
 	assert(tableIsEmpty("satec"), "there is old data in the satec table")
 	WriteProbabilities(satec_entries, "satec")
+	assert(!tableIsEmpty("satec"), "satec table not successfully written")
 	assert(tableIsEmpty("bcd"), "there is old data in the bcd table")
 	WriteProbabilities(bcd_entries, "bcd")
+	assert(!tableIsEmpty("bcd"), "bcd table not successfully written")
 }
 
 func getFmrCharacters() {
