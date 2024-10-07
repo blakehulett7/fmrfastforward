@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
@@ -42,6 +43,22 @@ func tableIsEmpty(tableName string) bool {
 		panic("Something went wrong checking if table is empty")
 	}
 	if strings.ReplaceAll(string(data), "\n", "") != "0" {
+		return false
+	}
+	return true
+}
+
+func table_has_length(table_name string, length int) bool {
+	sql_query := fmt.Sprintf("SELECT count(*) FROM %v", table_name)
+	data, err := outputSql(sql_query)
+	if err != nil {
+		panic(fmt.Sprintf("Something went wrong reading the data to check the %v table length", table_name))
+	}
+	got_length, err := strconv.Atoi(strings.ReplaceAll(string(data), "\n", ""))
+	if err != nil {
+		panic(fmt.Sprintf("Couldn't convert the string to an int to check the %v table length", table_name))
+	}
+	if got_length != length {
 		return false
 	}
 	return true
