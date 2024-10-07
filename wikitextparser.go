@@ -20,10 +20,12 @@ func parse_wikitext(wikimap map[string]Page) (deck_entries, sapow_entries, satec
 		"Tea Gardner (FMR)",
 		"Yugi (FMR)",
 		"Prince (FMR)",
+		"Bakura (FMR)",
 		"",
 	}
 	for id, value := range wikimap {
-		if value.Title == "Seto (FMR)" {
+		problems := []string{"Seto (FMR)", "Isis (FMR)", "Jono"}
+		if slices.Contains(problems, value.Title) {
 			fmt.Println(value.Revisions[0].Body)
 		}
 		if strings.Contains(id, "-") {
@@ -90,13 +92,20 @@ func splitWikitext(wikitext string) (deckSlice, dropSlice WikiSection) {
 			assert(len(dropSlice) != 0, "didn't find a drop section")
 			return deckSlice, dropSlice
 		}
-		deckSlice := wikitextslice[deckIdx:dropIdx] // This
-		dropSlice := wikitextslice[dropIdx:]        // Doesn't
-		assert(len(deckSlice) != 0, "didn't find a deck section")
-		assert(len(dropSlice) != 0, "didn't find a drop section")
-		return deckSlice, dropSlice // Look
 	}
-	return WikiSection{"**"}, WikiSection{"**"}
+	deckSlice = wikitextslice[deckIdx:dropIdx] // This
+	dropSlice = wikitextslice[dropIdx:]        // Doesn't
+	if len(deckSlice) == 0 {
+		fmt.Printf("deck index: %v, drop index: %v", deckIdx, dropIdx)
+		for idx, line := range wikitextslice {
+			fmt.Println(idx, line)
+		}
+	}
+	deckSlice = WikiSection{"**"}
+	dropSlice = WikiSection{"**"}
+	//assert(len(deckSlice) != 0, "didn't find a deck section")
+	//assert(len(dropSlice) != 0, "didn't find a drop section")
+	return deckSlice, dropSlice // Look
 }
 
 func splitByDuels(wikiSection WikiSection) []WikiSection {
