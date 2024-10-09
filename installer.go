@@ -23,7 +23,7 @@ func generateApiUrl(pagetoFetch string) string {
 	return fmt.Sprintf("https://yugipedia.com/api.php?action=query&prop=revisions&titles=%v&rvprop=content&format=json", pagetoFetch)
 }
 
-func getFmrData() {
+func getFmrData() { //TODO: function is too long, need to break this up
 	if !directoryExists(storageDirectory) {
 		os.Mkdir(storageDirectory, 0777)
 		assert(directoryExists(storageDirectory), "storage directory not properly initialized")
