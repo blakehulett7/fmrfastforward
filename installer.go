@@ -67,32 +67,42 @@ func getFmrData() {
 		initialize_rate_table("bcd")
 		assert(tableExists("bcd"), "failed to initialize bcd table")
 	}
-	assert(tableIsEmpty("probabilities"), "there is old data in the probablities table")
 	charactersQuery := read_character_data()
 	wikimap := charactersQuery.Query.Pages
 	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
+
 	assert(len(deck_entries) == known_deck_table_length, "incorrect number of deck entries, most likely missing cards...")
 	assert(len(sapow_entries) == known_sapow_table_length, "incorrect number of sapow entries, most likely missing cards...")
 	assert(len(satec_entries) == known_satec_table_length, "incorrect number of satec entries, most likely missing cards...")
 	assert(len(bcd_entries) == known_bcd_table_length, "incorrect number of bcd entries, most likely missing cards...")
+
 	assert(tableIsEmpty("decks"), "there is old data in the decks table")
 	WriteProbabilities(deck_entries, "decks")
 	assert(table_has_length("decks", known_deck_table_length), "deck table incorrectly written, we are missing cards most likely...")
+
+	assert(tableIsEmpty("sapow"), "there is old data in the sapow table")
 	WriteProbabilities(sapow_entries, "sapow")
 	assert(table_has_length("sapow", known_sapow_table_length), "sapow table incorrectly written, we are missing cards most likely...")
+
 	assert(tableIsEmpty("satec"), "there is old data in the satec table")
 	WriteProbabilities(satec_entries, "satec")
 	assert(table_has_length("satec", known_satec_table_length), "satec table incorrectly written, we are missing cards most likely...")
+
 	assert(tableIsEmpty("bcd"), "there is old data in the bcd table")
 	WriteProbabilities(bcd_entries, "bcd")
 	assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
-	cards_to_fetch := []string{}
-	for _, entry := range deck_entries {
-		if !slices.Contains(cards_to_fetch, entry.Card) {
-			fmt.Println(entry.Card)
-			cards_to_fetch = append(cards_to_fetch, entry.Card)
-		}
+
+	if slices.Contains(deck_entries, Probability{}) {
 	}
+	/*
+		cards_to_fetch := []string{}
+		for _, entry := range deck_entries {
+			if !slices.Contains(cards_to_fetch, entry.Card) {
+				fmt.Println(entry.Card)
+				cards_to_fetch = append(cards_to_fetch, entry.Card)
+			}
+		}
+	*/
 }
 
 func getFmrCharacters() {

@@ -156,7 +156,7 @@ CREATE TABLE fusions (
 
 func initialize_rate_table(table_name string) {
 	assert(!tableExists(table_name), fmt.Sprintf("%v table already exists, should not call this function", table_name))
-	sql_query := fmt.Sprintf("CREATE TABLE %v (id TEXT PRIMARY KEY, duel TEXT, card TEXT, rate INTEGER);", table_name)
+	sql_query := fmt.Sprintf("CREATE TABLE %v (id TEXT PRIMARY KEY, duel TEXT, card TEXT, rate INTEGER, UNIQUE(duel, card));", table_name)
 	runSql(sql_query)
 	assert(tableExists(table_name), fmt.Sprintf("failed to initialize the %v table", table_name))
 }
