@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
+
 	//"slices"
 	"strings"
 )
@@ -63,44 +65,24 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		initialize_rate_table("bcd")
 		WriteProbabilities(bcd_entries, "bcd")
 		assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
-	}
 
-	if !tableExists("cards") {
-		initializeCardsDB()
-		assert(tableExists("cards"), "failed to initialize cards table")
-	}
-	if !tableExists("fusions") {
-		initializeFusionsDB()
-		assert(tableExists("fusions"), "failed to initialize fusions table")
-	}
-	/*
-		cards_to_fetch := []string{}
-		for _, entry := range deck_entries {
-			if !slices.Contains(cards_to_fetch, entry.Card) {
-				cards_to_fetch = append(cards_to_fetch, entry.Card)
-			}
-		}
-		for _, entry := range sapow_entries {
-			if !slices.Contains(cards_to_fetch, entry.Card) {
-				cards_to_fetch = append(cards_to_fetch, entry.Card)
-			}
-		}
-		for _, entry := range satec_entries {
-			if !slices.Contains(cards_to_fetch, entry.Card) {
-				cards_to_fetch = append(cards_to_fetch, entry.Card)
-			}
-		}
-		for _, entry := range bcd_entries {
-			if !slices.Contains(cards_to_fetch, entry.Card) {
-				cards_to_fetch = append(cards_to_fetch, entry.Card)
-			}
-		}
+		cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
 		cards_string := ""
 		for _, card := range cards_to_fetch {
 			cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
 		}
-		fmt.Println(cards_string[1:])
-	*/
+		cards_string = cards_string[1:]
+		fmt.Println(cards_string)
+	}
+
+	if !tableExists("cards") { //Will likely change this to an assert
+		initializeCardsDB()
+		assert(tableExists("cards"), "failed to initialize cards table")
+	}
+	if !tableExists("fusions") { //Will likely change this to an assert
+		initializeFusionsDB()
+		assert(tableExists("fusions"), "failed to initialize fusions table")
+	}
 }
 
 func getFmrCharacters() {
@@ -184,4 +166,16 @@ func getCharacterData(fetchList []string) {
 	}
 	os.WriteFile(storageDirectory+"/characterdata.json", resData, 0777)
 	assert(fileExists(storageDirectory+"/characterdata.json"), "character data was not written properly")
+}
+
+func generate_cards_fetch_list(entries_array [][]Probability) []string {
+	cards_to_fetch := []string{}
+	for _, entries := range entries_array {
+		for _, entry := range entries {
+			if !slices.Contains(cards_to_fetch, entry.Card) {
+				cards_to_fetch = append(cards_to_fetch, entry.Card)
+			}
+		}
+	}
+	return cards_to_fetch
 }
