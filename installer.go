@@ -43,14 +43,11 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		assert(fileExists(storageDirectory+"/database.db"), "database file not present")
 		assert(tableExists("probabilities"), "failed to initialize probabilities table")
 	}
-	if !tableExists("cards") {
-		initializeCardsDB()
-		assert(tableExists("cards"), "failed to initialize cards table")
-	}
-	if !tableExists("fusions") {
-		initializeFusionsDB()
-		assert(tableExists("fusions"), "failed to initialize fusions table")
-	}
+
+	charactersQuery := read_character_data()
+	wikimap := charactersQuery.Query.Pages
+	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
+
 	if !tableExists("decks") {
 		initialize_rate_table("decks")
 		assert(tableExists("decks"), "failed to initialize decks table")
@@ -67,9 +64,14 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		initialize_rate_table("bcd")
 		assert(tableExists("bcd"), "failed to initialize bcd table")
 	}
-	charactersQuery := read_character_data()
-	wikimap := charactersQuery.Query.Pages
-	deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
+	if !tableExists("cards") {
+		initializeCardsDB()
+		assert(tableExists("cards"), "failed to initialize cards table")
+	}
+	if !tableExists("fusions") {
+		initializeFusionsDB()
+		assert(tableExists("fusions"), "failed to initialize fusions table")
+	}
 
 	assert(len(deck_entries) == known_deck_table_length, "incorrect number of deck entries, most likely missing cards...")
 	assert(len(sapow_entries) == known_sapow_table_length, "incorrect number of sapow entries, most likely missing cards...")
@@ -92,17 +94,32 @@ func getFmrData() { //TODO: function is too long, need to break this up
 	WriteProbabilities(bcd_entries, "bcd")
 	assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
 
-	if slices.Contains(deck_entries, Probability{}) {
-	}
-	/*
-		cards_to_fetch := []string{}
-		for _, entry := range deck_entries {
-			if !slices.Contains(cards_to_fetch, entry.Card) {
-				fmt.Println(entry.Card)
-				cards_to_fetch = append(cards_to_fetch, entry.Card)
-			}
+	cards_to_fetch := []string{}
+	for _, entry := range deck_entries {
+		if !slices.Contains(cards_to_fetch, entry.Card) {
+			cards_to_fetch = append(cards_to_fetch, entry.Card)
 		}
-	*/
+	}
+	for _, entry := range sapow_entries {
+		if !slices.Contains(cards_to_fetch, entry.Card) {
+			cards_to_fetch = append(cards_to_fetch, entry.Card)
+		}
+	}
+	for _, entry := range satec_entries {
+		if !slices.Contains(cards_to_fetch, entry.Card) {
+			cards_to_fetch = append(cards_to_fetch, entry.Card)
+		}
+	}
+	for _, entry := range bcd_entries {
+		if !slices.Contains(cards_to_fetch, entry.Card) {
+			cards_to_fetch = append(cards_to_fetch, entry.Card)
+		}
+	}
+	cards_string := ""
+	for _, card := range cards_to_fetch {
+		cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
+	}
+	fmt.Println(cards_string[1:])
 }
 
 func getFmrCharacters() {
