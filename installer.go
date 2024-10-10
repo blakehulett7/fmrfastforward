@@ -12,7 +12,7 @@ import (
 )
 
 const storageDirectory = "fmrfastforward"
-const dbPath = storageDirectory + "/sql.db"
+const dbPath = storageDirectory + "/database.db"
 const apiHeader = "speedrun bot, email: blake.hulett7@gmail.com"
 const known_deck_table_length = 3649
 const known_sapow_table_length = 3066
@@ -38,7 +38,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		getCharacterData(charactersToFetch)
 		assert(fileExists(storageDirectory+"/characterdata.json"), "failed to retrieve data for each character")
 	}
-	if !fileExists(storageDirectory + "/database.db") {
+	if !fileExists(dbPath) {
 		charactersQuery := read_character_data() //TODO: Add an assert for this function and make it able to take a path argument
 		wikimap := charactersQuery.Query.Pages
 		deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
@@ -65,22 +65,6 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
 	}
 
-	if !tableExists("decks") {
-		initialize_rate_table("decks")
-		assert(tableExists("decks"), "failed to initialize decks table")
-	}
-	if !tableExists("sapow") {
-		initialize_rate_table("sapow")
-		assert(tableExists("sapow"), "failed to initialize sapow table")
-	}
-	if !tableExists("satec") {
-		initialize_rate_table("satec")
-		assert(tableExists("satec"), "failed to initialize satec table")
-	}
-	if !tableExists("bcd") {
-		initialize_rate_table("bcd")
-		assert(tableExists("bcd"), "failed to initialize bcd table")
-	}
 	if !tableExists("cards") {
 		initializeCardsDB()
 		assert(tableExists("cards"), "failed to initialize cards table")

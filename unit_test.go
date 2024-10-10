@@ -6,6 +6,6 @@ import (
 )
 
 func TestInstaller(t *testing.T) {
-	defer os.Remove(storageDirectory + "/database.db")
+	defer os.Remove(dbPath)
 	getFmrData()
 }
