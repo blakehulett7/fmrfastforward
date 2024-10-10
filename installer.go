@@ -62,14 +62,18 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		WriteProbabilities(bcd_entries, "bcd")
 		assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
 
-		assert(!tableExists("cards"), "cards table should not exist yet")
-		cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
-		cards_string := ""
-		for _, card := range cards_to_fetch {
-			cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
+		if !fileExists(storageDirectory + "/cards.json") {
+			cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
+			cards_string := ""
+			for _, card := range cards_to_fetch {
+				cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
+			}
+			cards_string = cards_string[1:]
+			fetch_data(cards_string, "/cards.json")
+			assert(fileExists(storageDirectory+"/cards.json"), "cards data was not written by the fetch_data function")
 		}
-		cards_string = cards_string[1:]
-		fmt.Println(cards_string)
+
+		assert(!tableExists("cards"), "cards table should not exist yet")
 	}
 
 	if !tableExists("cards") { //Will likely change this to an assert
@@ -165,12 +169,19 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory+"/characterdata.json"), "character data was not written properly")
 }
 
-func generate_cards_fetch_list(entries_array [][]Probability) []string {
-	cards_to_fetch := []string{}
+func generate_cards_fetch_list(entries_array [][]Probability) [225]string {
+	cards_to_fetch := [225]string{}
+	fetch_slice := []string{}
 	for _, entries := range entries_array {
+		i := 0
 		for _, entry := range entries {
-			if !slices.Contains(cards_to_fetch, entry.Card) {
-				cards_to_fetch = append(cards_to_fetch, entry.Card)
+			if i >= 225 {
+				break
+			}
+			if !slices.Contains(fetch_slice, entry.Card) {
+				fetch_slice = append(fetch_slice, entry.Card)
+				cards_to_fetch[i] = entry.Card
+				i++
 			}
 		}
 	}
