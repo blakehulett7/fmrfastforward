@@ -21,10 +21,6 @@ const known_sapow_table_length = 3066
 const known_satec_table_length = 2917
 const known_bcd_table_length = 2683
 
-func generateApiUrl(pagetoFetch string) string {
-	return fmt.Sprintf("https://yugipedia.com/api.php?action=query&prop=revisions&titles=%v&rvprop=content&format=json", pagetoFetch)
-}
-
 func getFmrData() { //TODO: function is too long, need to break this up
 	if !directoryExists(storageDirectory) {
 		os.Mkdir(storageDirectory, 0777)
@@ -66,6 +62,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		WriteProbabilities(bcd_entries, "bcd")
 		assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
 
+		assert(!tableExists("cards"), "cards table should not exist yet")
 		cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
 		cards_string := ""
 		for _, card := range cards_to_fetch {
