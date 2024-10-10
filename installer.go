@@ -169,21 +169,17 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory+"/characterdata.json"), "character data was not written properly")
 }
 
-func generate_cards_fetch_list(entries_array [][]Probability) [225]string {
-	cards_to_fetch := [225]string{}
+func generate_cards_fetch_list(entries_array [][]Probability) []string {
 	fetch_slice := []string{}
 	for _, entries := range entries_array {
-		i := 0
 		for _, entry := range entries {
-			if i >= 225 {
-				break
-			}
 			if !slices.Contains(fetch_slice, entry.Card) {
 				fetch_slice = append(fetch_slice, entry.Card)
-				cards_to_fetch[i] = entry.Card
-				i++
 			}
 		}
 	}
-	return cards_to_fetch
+	batch_1 := fetch_slice[:224]
+	//batch_2 := fetch_slice[225:549]
+	//batch_3 := fetch_slice[550:]
+	return batch_1
 }
