@@ -178,7 +178,6 @@ func initializeProbability(duel, cardId string) {
 }
 
 func WriteProbabilities(entries []Probability, table_name string) {
-	assert(tableIsEmpty(table_name), fmt.Sprintf("%v table has data, should not be calling this function to write into it", table_name))
 	values_string := ""
 	for _, entry := range entries {
 		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", \"%v\", %v)", entry.Id, entry.Duel, entry.Card, entry.Rate)
