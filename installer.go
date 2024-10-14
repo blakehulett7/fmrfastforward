@@ -64,13 +64,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 
 		if !fileExists(storageDirectory + "/cards.json") {
 			cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
-			cards_string := ""
-			for _, card := range cards_to_fetch {
-				cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
-			}
-			cards_string = cards_string[1:]
-			fetch_data(cards_string, "/cards.json")
-			assert(fileExists(storageDirectory+"/cards.json"), "cards data was not written by the fetch_data function")
+			get_cards_data(cards_to_fetch)
 		}
 
 		assert(!tableExists("cards"), "cards table should not exist yet")
@@ -169,7 +163,7 @@ func getCharacterData(fetchList []string) {
 	assert(fileExists(storageDirectory+"/characterdata.json"), "character data was not written properly")
 }
 
-func generate_cards_fetch_list(entries_array [][]Probability) []string {
+func generate_cards_fetch_list(entries_array [][]Probability) [][]string {
 	fetch_slice := []string{}
 	for _, entries := range entries_array {
 		for _, entry := range entries {
@@ -179,7 +173,21 @@ func generate_cards_fetch_list(entries_array [][]Probability) []string {
 		}
 	}
 	batch_1 := fetch_slice[:224]
-	//batch_2 := fetch_slice[225:549]
-	//batch_3 := fetch_slice[550:]
-	return batch_1
+	batch_2 := fetch_slice[225:399]
+	batch_3 := fetch_slice[400:599]
+	batch_4 := fetch_slice[600:]
+	return [][]string{batch_1, batch_2, batch_3, batch_4}
+}
+
+func get_cards_data(cards_to_fetch [][]string) {
+	for idx, fetch_list := range cards_to_fetch {
+		cards_string := ""
+		for _, card := range fetch_list {
+			cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
+		}
+		cards_string = cards_string[1:]
+		path := fmt.Sprintf("/cards%v.json", idx+1)
+		fetch_data(cards_string, path)
+		assert(fileExists(storageDirectory+path), "cards data was not written by the fetch_data function")
+	}
 }
