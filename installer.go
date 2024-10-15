@@ -62,7 +62,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		WriteProbabilities(bcd_entries, "bcd")
 		assert(table_has_length("bcd", known_bcd_table_length), "bcd table incorrectly written, we are missing cards most likely...")
 
-		if !fileExists(storageDirectory + "/cards.json") {
+		if !directoryExists(storageDirectory + "/cards") {
 			cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
 			get_cards_data(cards_to_fetch)
 		}
@@ -192,13 +192,15 @@ func generate_cards_fetch_list(entries_array [][]Probability) [][]string {
 }
 
 func get_cards_data(cards_to_fetch [][]string) {
+	assert(!directoryExists(storageDirectory+"/cards"), "cards directory should not exist yet")
+	os.Mkdir(storageDirectory+"/cards", 0777)
 	for idx, fetch_list := range cards_to_fetch {
 		cards_string := ""
 		for _, card := range fetch_list {
 			cards_string = cards_string + "|" + strings.ReplaceAll(card, " ", "_")
 		}
 		cards_string = cards_string[1:]
-		path := fmt.Sprintf("/cards%v.json", idx+1)
+		path := fmt.Sprintf("/cards/cards%v.json", idx+1)
 		fetch_data(cards_string, path)
 		assert(fileExists(storageDirectory+path), "cards data was not written by the fetch_data function")
 	}
