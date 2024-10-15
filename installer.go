@@ -172,11 +172,23 @@ func generate_cards_fetch_list(entries_array [][]Probability) [][]string {
 			}
 		}
 	}
-	batch_1 := fetch_slice[:224]
-	batch_2 := fetch_slice[225:399]
-	batch_3 := fetch_slice[400:599]
-	batch_4 := fetch_slice[600:]
-	return [][]string{batch_1, batch_2, batch_3, batch_4}
+	// len(fetch_slice) = 716
+	batch_1 := fetch_slice[:49]
+	batch_2 := fetch_slice[50:99]
+	batch_3 := fetch_slice[100:149]
+	batch_4 := fetch_slice[150:199]
+	batch_5 := fetch_slice[200:249]
+	batch_6 := fetch_slice[250:299]
+	batch_7 := fetch_slice[300:349]
+	batch_8 := fetch_slice[350:399]
+	batch_9 := fetch_slice[400:449]
+	batch_10 := fetch_slice[450:499]
+	batch_11 := fetch_slice[500:549]
+	batch_12 := fetch_slice[550:599]
+	batch_13 := fetch_slice[600:649]
+	batch_14 := fetch_slice[650:699]
+	batch_15 := fetch_slice[700:]
+	return [][]string{batch_1, batch_2, batch_3, batch_4, batch_5, batch_6, batch_7, batch_8, batch_9, batch_10, batch_11, batch_12, batch_13, batch_14, batch_15}
 }
 
 func get_cards_data(cards_to_fetch [][]string) {
