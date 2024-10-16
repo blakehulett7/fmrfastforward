@@ -8,22 +8,22 @@ import (
 	"net/http"
 	"os"
 	"slices"
-
-	//"slices"
 	"strings"
 )
 
 const storageDirectory = "fmrfastforward"
 const dbPath = storageDirectory + "/database.db"
 const apiHeader = "speedrun bot, email: blake.hulett7@gmail.com"
+const known_character_length = 42
 const known_deck_table_length = 3649
 const known_sapow_table_length = 3066
 const known_satec_table_length = 2917
 const known_bcd_table_length = 2683
+const max_permissions = 0777
 
 func getFmrData() { //TODO: function is too long, need to break this up
 	if !directoryExists(storageDirectory) {
-		os.Mkdir(storageDirectory, 0777)
+		os.Mkdir(storageDirectory, max_permissions)
 		assert(directoryExists(storageDirectory), "storage directory not properly initialized")
 	}
 	if !fileExists(storageDirectory + "/characters.json") {
@@ -32,7 +32,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 	}
 	if !fileExists(storageDirectory + "/characterdata.json") {
 		charactersToFetch := parseCharacterList()
-		assert(len(charactersToFetch) == 42, "there should be 42 characters here")
+		assert(len(charactersToFetch) == known_character_length, "there should be 42 characters here")
 		getCharacterData(charactersToFetch)
 		assert(fileExists(storageDirectory+"/characterdata.json"), "failed to retrieve data for each character")
 	}
@@ -101,7 +101,7 @@ func getFmrCharacters() {
 		fmt.Println("Couldn't read json response from the character list page, error:", err)
 		return
 	}
-	os.WriteFile(path, resData, 0777)
+	os.WriteFile(path, resData, max_permissions)
 	assert(fileExists(path), "character list data was not written properly")
 }
 
