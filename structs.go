@@ -47,6 +47,12 @@ type Page struct {
 	} `json:"revisions"`
 }
 
+type Card_Page_JSON struct {
+	Query struct {
+		Pages map[string]Page `json:"pages"`
+	} `json:"query"`
+}
+
 type Deck []string
 
 type WikiSection []string

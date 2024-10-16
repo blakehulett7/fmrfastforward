@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func read_character_data() CharactersQuery {
-	data, err := os.ReadFile(storageDirectory + "/characterdata.json")
+func read_character_data(path string) CharactersQuery {
+	data, err := os.ReadFile(storageDirectory + path)
 	if err != nil {
 		fmt.Println("Couldn't load the character json data from disk, error:", err)
 		panic(err)

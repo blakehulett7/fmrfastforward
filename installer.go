@@ -37,7 +37,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		assert(fileExists(storageDirectory+"/characterdata.json"), "failed to retrieve data for each character")
 	}
 	if !fileExists(dbPath) {
-		charactersQuery := read_character_data() //TODO: Add an assert for this function and make it able to take a path argument
+		charactersQuery := read_character_data("/characterdata.json")
 		wikimap := charactersQuery.Query.Pages
 		deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
 
