@@ -273,12 +273,14 @@ func parse_drop_text(drop_text []WikiSection, duel_title string) (sapow_entries,
 
 func parse_cards(wikimap map[string]Page) {
 	fmt.Println(wikimap["301073"].Title)
-	card := Card{Id: uuid.NewString(), Name: wikimap["301073"].Title}
-	lines := strings.Split(wikimap["301073"].Revisions[0].Body, "\n")
+	id := uuid.NewString()
+	card := Card{Id: id, Name: wikimap["301073"].Title}
+	lines := strings.Split(wikimap["300821"].Revisions[0].Body, "\n")
 	for _, line := range lines {
-		fmt.Println(line)
 		if !strings.HasPrefix(line, "|") {
-			continue
+			if !strings.HasPrefix(line, "*") {
+				continue
+			}
 		}
 		if strings.HasPrefix(line, "| type") {
 			card.Type = strings.TrimSpace(strings.Split(line, "=")[1])
@@ -301,6 +303,9 @@ func parse_cards(wikimap map[string]Page) {
 		if strings.HasPrefix(line, "| guardian_stars") {
 			stars := strings.ReplaceAll(strings.Split(line, "=")[1], " ", "")
 			card.GuardianStars = stars
+		}
+		if strings.HasPrefix(line, "*") {
+			fmt.Println(line)
 		}
 	}
 	fmt.Println(card)
