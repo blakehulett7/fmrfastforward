@@ -65,15 +65,15 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		if !directoryExists(storageDirectory + "/cards") {
 			cards_to_fetch := generate_cards_fetch_list([][]Probability{deck_entries, sapow_entries, satec_entries, bcd_entries})
 			get_cards_data(cards_to_fetch)
+			assert(directoryExists(storageDirectory+"/cards"), "something went wrong fetching the cards data")
 		}
 
-		assert(!tableExists("cards"), "cards table should not exist yet")
+		if !tableExists("cards") {
+			cards_wikimap := read_cards_data("/cards")
+			parse_cards(cards_wikimap)
+		}
 	}
 
-	if !tableExists("cards") { //Will likely change this to an assert
-		initializeCardsDB()
-		assert(tableExists("cards"), "failed to initialize cards table")
-	}
 	if !tableExists("fusions") { //Will likely change this to an assert
 		initializeFusionsDB()
 		assert(tableExists("fusions"), "failed to initialize fusions table")

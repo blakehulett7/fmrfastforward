@@ -20,3 +20,19 @@ func read_character_data(path string) CharactersQuery {
 	}
 	return charactersQuery
 }
+
+func read_cards_data(directory string) map[string]Page {
+	cards_files, err := os.ReadDir(storageDirectory + directory)
+	if err != nil {
+		panic(err)
+	}
+	cards_wikimap := map[string]Page{}
+	for _, card_file := range cards_files {
+		path := "/cards/" + card_file.Name()
+		file_map := read_character_data(path)
+		for key, value := range file_map.Query.Pages {
+			cards_wikimap[key] = value
+		}
+	}
+	return cards_wikimap
+}

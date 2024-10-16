@@ -270,3 +270,38 @@ func parse_drop_text(drop_text []WikiSection, duel_title string) (sapow_entries,
 	assert(len(bcd_entries) != 0, "failed to parse bcd table")
 	return sapow_entries, satec_entries, bcd_entries
 }
+
+func parse_cards(wikimap map[string]Page) {
+	fmt.Println(wikimap["301073"].Title)
+	card := Card{Id: uuid.NewString(), Name: wikimap["301073"].Title}
+	lines := strings.Split(wikimap["301073"].Revisions[0].Body, "\n")
+	for _, line := range lines {
+		fmt.Println(line)
+		if !strings.HasPrefix(line, "|") {
+			continue
+		}
+		if strings.HasPrefix(line, "| type") {
+			card.Type = strings.TrimSpace(strings.Split(line, "=")[1])
+		}
+		if strings.HasPrefix(line, "| atk") {
+			atk, err := strconv.Atoi(strings.TrimSpace(strings.Split(line, "=")[1]))
+			assert(err == nil, "conversion of card's atk to an integer failed")
+			card.Attack = atk
+		}
+		if strings.HasPrefix(line, "| def") {
+			def, err := strconv.Atoi(strings.TrimSpace(strings.Split(line, "=")[1]))
+			assert(err == nil, "conversion of card's def to an integer failed")
+			card.Defense = def
+		}
+		if strings.HasPrefix(line, "| star_chips") {
+			sc, err := strconv.Atoi(strings.TrimSpace(strings.Split(line, "=")[1]))
+			assert(err == nil, "conversion of card's star chips to an integer failed")
+			card.StarChips = sc
+		}
+		if strings.HasPrefix(line, "| guardian_stars") {
+			stars := strings.ReplaceAll(strings.Split(line, "=")[1], " ", "")
+			card.GuardianStars = stars
+		}
+	}
+	fmt.Println(card)
+}
