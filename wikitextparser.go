@@ -271,7 +271,7 @@ func parse_drop_text(drop_text []WikiSection, duel_title string) (sapow_entries,
 	return sapow_entries, satec_entries, bcd_entries
 }
 
-func parse_cards(wikimap map[string]Page) {
+func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 	cards := []Card{}
 	targets := []Target{}
 	cards_stars := []Card_Star{}
@@ -331,5 +331,5 @@ func parse_cards(wikimap map[string]Page) {
 		targets = append(targets, my_targets...)
 		cards_stars = append(cards_stars, my_stars...)
 	}
-	fmt.Println(targets, cards, cards_stars)
+	return cards, targets, cards_stars
 }

@@ -132,8 +132,10 @@ func initializeCardsDB() {
 CREATE TABLE cards (
     id TEXT PRIMARY KEY,
     name TEXT UNIQUE,
+    type TEXT,
     atk INTEGER,
-    def INTEGER
+    def INTEGER,
+    star_chips INTEGER,
     );
     `
 	runSql(sqlQuery)
@@ -161,14 +163,6 @@ func initialize_rate_table(table_name string) {
 	assert(tableExists(table_name), fmt.Sprintf("failed to initialize the %v table", table_name))
 }
 
-func initializeCard(cardName string) {
-	assert(!cardExists(cardName), "card already present in the db")
-	id := uuid.NewString()
-	sqlQuery := fmt.Sprintf("INSERT INTO cards(id, name) VALUES ('%v', '%v');", id, cardName)
-	runSql(sqlQuery)
-	assert(cardExists(cardName), "card was not saved to the db properly")
-}
-
 func initializeProbability(duel, cardId string) {
 	assert(!probabilityExists(duel, cardId), "probability already present in the db")
 	id := uuid.NewString()
@@ -187,4 +181,16 @@ func WriteProbabilities(entries []Probability, table_name string) {
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
 	runSql(sql_query)
 	assert(!tableIsEmpty(table_name), fmt.Sprintf("Something went wrong writing to the %v table, no data was written", table_name))
+}
+
+func write_cards_to_db(entries []Card, table_name string) {
+	values_string := ""
+	for _, entry := range entries {
+		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", \"%v\", %v, %v, %v)", entry.Id, entry.Name, entry.Type, entry.Attack, entry.Defense, entry.StarChips)
+		values_string += entry_string
+	}
+	values_string = values_string[2:]
+	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
+	runSql(sql_query)
+	assert(!table)
 }
