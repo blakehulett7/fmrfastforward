@@ -6,14 +6,31 @@ type Character struct {
 }
 
 type Card struct {
-	Id            string
-	Name          string
-	Type          string
-	Attack        int
-	Defense       int
-	GuardianStars string
-	StarChips     int
-	Targets       string
+	Id        string
+	Name      string
+	Type      string
+	Attack    int
+	Defense   int
+	StarChips int
+}
+
+type Target struct {
+	Id     string
+	Equip  string
+	Target string
+}
+
+type Star struct {
+	Id        string
+	Name      string
+	Strong_To string
+	Weak_To   string
+}
+
+type Card_Star struct {
+	Id   string
+	Card string
+	Star string
 }
 
 type Probability struct {
