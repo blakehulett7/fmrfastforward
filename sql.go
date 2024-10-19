@@ -135,7 +135,7 @@ CREATE TABLE cards (
     type TEXT,
     atk INTEGER,
     def INTEGER,
-    star_chips INTEGER,
+    star_chips INTEGER
     );
     `
 	runSql(sqlQuery)
@@ -192,5 +192,5 @@ func write_cards_to_db(entries []Card, table_name string) {
 	values_string = values_string[2:]
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
 	runSql(sql_query)
-	assert(!table)
+	assert(!tableIsEmpty("cards"), "Something went wrong writing to the cards tables, no data was written")
 }
