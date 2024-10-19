@@ -71,8 +71,10 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		if !tableExists("cards") {
 			initializeCardsDB()
 			cards_wikimap := read_cards_data("/cards")
-			cards, _, _ := parse_cards(cards_wikimap)
+			cards, targets, cards_stars := parse_cards(cards_wikimap)
 			write_cards_to_db(cards, "cards")
+			write_targets_to_db(targets, "targets")
+			write_cards_stars_to_db(cards_stars, "cards_stars")
 		}
 	}
 
