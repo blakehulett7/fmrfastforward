@@ -344,7 +344,6 @@ func parse_fusions(wikimap map[string]Page) {
 		}
 		fmt.Println(key, value.Title)
 	}
-	fmt.Println(wikimap["1009580"])
 	v := wikimap["1009580"].Revisions[0].Body
 	v_slices := strings.Split(v, "\n")
 	indices := []int{}
@@ -360,6 +359,13 @@ func parse_fusions(wikimap map[string]Page) {
 			indices = append(indices, index)
 		}
 	}
+	var title string
+	for _, line := range v_slices_by_fusion[0] {
+		fmt.Println(line)
+		if strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "|r") {
+			title = strings.TrimSpace(strings.Split(line, "=")[1])
+		}
+	}
 	lines_by_fusion_number := splitter(v_slices_by_fusion[0], indices)
 	for _, section := range lines_by_fusion_number {
 		normalized := strings.ReplaceAll(section[0], " ", "")
@@ -367,8 +373,17 @@ func parse_fusions(wikimap map[string]Page) {
 		fusion_number := int(fusion_number_rune - '0')
 		material_number_rune := normalized[5]
 		material_number := int(material_number_rune - '0')
-		fmt.Println(fusion_number, material_number)
-		fmt.Println()
+		assert(slices.Contains([]int{1, 2}, material_number), "material_number must be a 1 or 2")
+
+		materials := []string{}
+		for _, line := range section {
+			if !strings.HasPrefix(line, "*") {
+				continue
+			}
+			materials = append(materials, strings.TrimSpace(
+				strings.Split(strings.Split(line, "[[")[1], "|")[0]))
+		}
+		fmt.Printf("%v f%v, m%v: %v\n", title, fusion_number, material_number, materials)
 	}
 }
 
