@@ -35,9 +35,9 @@ type Card_Star struct {
 
 type Material struct {
 	Id               string
-	Card             string
-	Fusion_Number    int
 	Resulting_Fusion string
+	Fusion_Number    int
+	Card             string
 }
 
 type Probability struct {

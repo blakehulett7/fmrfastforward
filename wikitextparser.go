@@ -337,71 +337,69 @@ func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 	return cards, targets, cards_stars
 }
 
-func parse_fusions(wikimap map[string]Page) {
+func parse_fusions(wikimap map[string]Page) (m1_entries, m2_entries []Material) {
 	for key, value := range wikimap {
 		if value.Title == "Glitch fusion" {
 			continue
 		}
 		fmt.Println(key, value.Title)
-	}
-	v := wikimap["1009580"].Revisions[0].Body
-	v_slices := strings.Split(v, "\n")
-	indices := []int{}
-	for index, line := range v_slices {
-		if strings.HasPrefix(line, "=") {
-			indices = append(indices, index)
+		v := value.Revisions[0].Body
+		v_slices := strings.Split(v, "\n")
+		indices := []int{}
+		for index, line := range v_slices {
+			if strings.HasPrefix(line, "=") {
+				indices = append(indices, index)
+			}
 		}
-	}
-	v_slices_by_fusion := splitter(v_slices, indices)
-	indices = []int{}
-	for index, line := range v_slices_by_fusion[0] {
-		if strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "|f") {
-			indices = append(indices, index)
-		}
-	}
-	var title string
-	for _, line := range v_slices_by_fusion[0] {
-		fmt.Println(line)
-		if strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "|r") {
-			title = strings.TrimSpace(strings.Split(line, "=")[1])
-		}
-	}
-	lines_by_fusion_number := splitter(v_slices_by_fusion[0], indices)
-	m1_entries := []Material{}
-	m2_entries := []Material{}
-	for _, section := range lines_by_fusion_number {
-		normalized := strings.ReplaceAll(section[0], " ", "")
-		fusion_number_rune := normalized[2]
-		fusion_number := int(fusion_number_rune - '0')
-		material_number_rune := normalized[5]
-		material_number := int(material_number_rune - '0')
-		assert(slices.Contains([]int{1, 2}, material_number), "material_number must be a 1 or 2")
+		v_slices_by_fusion := splitter(v_slices, indices)
+		for _, v_slice := range v_slices_by_fusion {
+			indices = []int{}
+			for index, line := range v_slice {
+				if strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "|f") {
+					indices = append(indices, index)
+				}
+			}
+			var title string
+			for _, line := range v_slice {
+				if strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "|r") {
+					title = strings.TrimSpace(strings.Split(line, "=")[1])
+				}
+			}
+			lines_by_fusion_number := splitter(v_slice, indices)
+			for _, section := range lines_by_fusion_number {
+				normalized := strings.ReplaceAll(section[0], " ", "")
+				fusion_number_rune := normalized[2]
+				fusion_number := int(fusion_number_rune - '0')
+				material_number_rune := normalized[5]
+				material_number := int(material_number_rune - '0')
+				assert(slices.Contains([]int{1, 2}, material_number), "material_number must be a 1 or 2")
 
-		materials := []string{}
-		for _, line := range section {
-			if !strings.HasPrefix(line, "*") {
-				continue
+				materials := []string{}
+				for _, line := range section {
+					if !strings.HasPrefix(line, "*") {
+						continue
+					}
+					materials = append(materials, strings.TrimSpace(
+						strings.Split(strings.Split(line, "[[")[1], "|")[0]))
+				}
+				//fmt.Printf("%v f%v, m%v: %v\n", title, fusion_number, material_number, materials)
+				for _, material := range materials {
+					entry := Material{
+						Id:               uuid.NewString(),
+						Resulting_Fusion: title,
+						Fusion_Number:    fusion_number,
+						Card:             material,
+					}
+					if material_number == 1 {
+						m1_entries = append(m1_entries, entry)
+						continue
+					}
+					m2_entries = append(m2_entries, entry)
+				}
 			}
-			materials = append(materials, strings.TrimSpace(
-				strings.Split(strings.Split(line, "[[")[1], "|")[0]))
-		}
-		fmt.Printf("%v f%v, m%v: %v\n", title, fusion_number, material_number, materials)
-		for _, material := range materials {
-			entry := Material{
-				Id:               uuid.NewString(),
-				Card:             material,
-				Fusion_Number:    fusion_number,
-				Resulting_Fusion: title,
-			}
-			if material_number == 1 {
-				m1_entries = append(m1_entries, entry)
-				continue
-			}
-			m2_entries = append(m2_entries, entry)
 		}
 	}
-	fmt.Println(m1_entries)
-	fmt.Println(m2_entries)
+	return m1_entries, m2_entries
 }
 
 func splitter(string_slice []string, indices []int) [][]string {

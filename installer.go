@@ -91,7 +91,7 @@ func getFmrData() { //TODO: function is too long, need to break this up
 	}
 
 	fusions_query := read_character_data("/fusions.json")
-	parse_fusions(fusions_query.Query.Pages)
+	m1_entries, m2_entries := parse_fusions(fusions_query.Query.Pages)
 }
 
 func getFmrCharacters() {
