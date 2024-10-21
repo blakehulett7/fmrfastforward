@@ -9,5 +9,6 @@ func main() {
 	if !fileExists(dbPath) {
 		fmt.Println("Installing game data...")
 		install()
+		assert(fileExists(dbPath), "install failed, shutting down...")
 	}
 }
