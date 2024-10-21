@@ -345,4 +345,33 @@ func parse_fusions(wikimap map[string]Page) {
 		fmt.Println(key, value.Title)
 	}
 	fmt.Println(wikimap["1009580"])
+	v := wikimap["1009580"].Revisions[0].Body
+	v_slices := strings.Split(v, "\n")
+	indices := []int{}
+	for index, line := range v_slices {
+		if strings.HasPrefix(line, "=") {
+			indices = append(indices, index)
+		}
+	}
+	v_slices_by_fusion := splitter(v_slices, indices)
+	indices = []int{}
+	for index, line := range v_slices_by_fusion[0] {
+		if strings.HasPrefix(strings.ReplaceAll(line, " ", ""), "|f") {
+			indices = append(indices, index)
+		}
+	}
+	lines_by_fusion_number := splitter(v_slices_by_fusion[0], indices)
+	fmt.Println(lines_by_fusion_number)
+}
+
+func splitter(string_slice []string, indices []int) [][]string {
+	split_slice := [][]string{}
+	for index := range indices {
+		if index == len(indices)-1 {
+			split_slice = append(split_slice, string_slice[indices[index]:])
+			break
+		}
+		split_slice = append(split_slice, string_slice[indices[index]:indices[index+1]])
+	}
+	return split_slice
 }
