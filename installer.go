@@ -80,18 +80,19 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		}
 	}
 
-	if !tableExists("fusions") { //Will likely change this to an assert
-		initializeFusionsDB()
-		assert(tableExists("fusions"), "failed to initialize fusions table")
-	}
-
 	if !fileExists(storageDirectory + "/fusions.json") {
 		get_fusions()
 		assert(fileExists(storageDirectory+"/fusions.json"), "fusion data was not properly written")
 	}
 
-	fusions_query := read_character_data("/fusions.json")
-	m1_entries, m2_entries := parse_fusions(fusions_query.Query.Pages)
+	if !tableExists("fusions") {
+		initializeFusionsDB()
+		fusions_query := read_character_data("/fusions.json")
+		m1_entries, m2_entries := parse_fusions(fusions_query.Query.Pages)
+		write_fusions_to_db(m1_entries, "m1")
+		write_fusions_to_db(m2_entries, "m2")
+		assert(tableExists("fusions"), "failed to initialize fusions table")
+	}
 }
 
 func getFmrCharacters() {

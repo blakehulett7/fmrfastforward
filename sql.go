@@ -141,17 +141,27 @@ CREATE TABLE cards (
 }
 
 func initializeFusionsDB() {
-	assert(!tableExists("fusions"), "fusions table already exists...")
+	assert(!tableExists("m1"), "m1 table already exists...")
 	sqlQuery := `
-CREATE TABLE fusions (
+CREATE TABLE m1 (
     id TEXT PRIMARY KEY,
-    card_id TEXT,
-    used_in TEXT,
-    material_1 TEXT,
-    material_2 TEXT,
-    FOREIGN KEY(card_id, used_in, material_1, material_2) REFERENCES cards(id, id, id, id));`
+    resulting_fusion TEXT,
+    fusion_number INTEGER,
+    card TEXT
+    );`
 	runSql(sqlQuery)
-	assert(tableExists("fusions"), "fusions table failed to properly intialize")
+	assert(tableExists("m1"), "m1 table failed to properly intialize")
+
+	assert(!tableExists("m2"), "m2 table already exists...")
+	sqlQuery = `
+CREATE TABLE m2 (
+    id TEXT PRIMARY KEY,
+    resulting_fusion TEXT,
+    fusion_number INTEGER,
+    card TEXT
+    );`
+	runSql(sqlQuery)
+	assert(tableExists("m2"), "m2 table failed to properly intialize")
 }
 
 func initialize_rate_table(table_name string) {
@@ -231,4 +241,16 @@ func write_cards_stars_to_db(entries []Card_Star, table_name string) {
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
 	runSql(sql_query)
 	assert(!tableIsEmpty("cards_stars"), "Something went wrong writing to the cards_stars tables, no data was written")
+}
+
+func write_fusions_to_db(entries []Material, table_name string) {
+	values_string := ""
+	for _, entry := range entries {
+		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", %v, \"%v\")", entry.Id, entry.Resulting_Fusion, entry.Fusion_Number, entry.Card)
+		values_string += entry_string
+	}
+	values_string = values_string[2:]
+	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
+	runSql(sql_query)
+	assert(!tableIsEmpty(table_name), fmt.Sprintf("Something went wrong writing the %v table", table_name))
 }

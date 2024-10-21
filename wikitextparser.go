@@ -338,11 +338,10 @@ func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 }
 
 func parse_fusions(wikimap map[string]Page) (m1_entries, m2_entries []Material) {
-	for key, value := range wikimap {
+	for _, value := range wikimap {
 		if value.Title == "Glitch fusion" {
 			continue
 		}
-		fmt.Println(key, value.Title)
 		v := value.Revisions[0].Body
 		v_slices := strings.Split(v, "\n")
 		indices := []int{}
