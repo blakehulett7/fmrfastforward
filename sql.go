@@ -167,8 +167,7 @@ func initialize_targets_table() {
 CREATE TABLE targets (
     id TEXT PRIMARY KEY,
     equip TEXT,
-    target TEXT,
-    UNIQUE(equip, target)
+    target TEXT
     );`
 	runSql(sql_query)
 	assert(tableExists("targets"), "targets table failed to properly initialize")
@@ -201,11 +200,12 @@ func write_cards_to_db(entries []Card, table_name string) {
 func write_targets_to_db(entries []Target, table_name string) {
 	values_string := ""
 	for _, entry := range entries {
-		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", \"%v\")", entry.Id, entry.Equip, entry.Target)
+		entry_string := fmt.Sprintf(",\n(\"%v\", \"%v\", \"%v\")", entry.Id, entry.Equip, entry.Target)
 		values_string += entry_string
 	}
 	values_string = values_string[2:]
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
+	fmt.Println(sql_query)
 	runSql(sql_query)
 	assert(!tableIsEmpty("targets"), "Something went wrong writing to the targets tables, no data was written")
 }

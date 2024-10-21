@@ -276,6 +276,9 @@ func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 	targets := []Target{}
 	cards_stars := []Card_Star{}
 	for _, card_text := range wikimap {
+		if card_text.Title == "Ray" {
+			continue
+		}
 		id := uuid.NewString()
 		card := Card{Id: id, Name: card_text.Title}
 		my_targets := []Target{}
