@@ -97,6 +97,13 @@ func getCardId(cardName string) string {
 	return strings.ReplaceAll(string(data), "\n", "")
 }
 
+func get_potential_fusions(card_name string) []string {
+	assert(cardExists(card_name), fmt.Sprintf("%v is not in the cards database, shutting down...", card_name))
+	sql_query := fmt.Sprintf("SELECT resulting_fusion FROM m1 WHERE card = \"%v\";", card_name)
+	fmt.Println(sql_query)
+	return []string{}
+}
+
 func getProbabilityId(duel, cardId string) string {
 	assert(probabilityExists(duel, cardId), "can't get an id for a probability not yet in the db")
 	sqlQuery := fmt.Sprintf("SELECT id FROM probabilities WHERE duel = '%v' AND card_id = '%v';", duel, cardId)

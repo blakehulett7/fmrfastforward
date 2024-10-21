@@ -8,7 +8,8 @@ func main() {
 	fmt.Println("Christ is King!")
 	if !fileExists(dbPath) {
 		fmt.Println("Installing game data...")
-		install()
+		install(dbPath)
 		assert(fileExists(dbPath), "install failed, shutting down...")
 	}
+
 }

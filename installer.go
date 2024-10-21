@@ -13,6 +13,7 @@ import (
 
 const storageDirectory = "fmrfastforward"
 const dbPath = storageDirectory + "/database.db"
+const testdbPath = storageDirectory + "/test.db"
 const apiHeader = "speedrun bot, email: blake.hulett7@gmail.com"
 const known_character_length = 42
 const known_deck_table_length = 3649
@@ -21,7 +22,7 @@ const known_satec_table_length = 2917
 const known_bcd_table_length = 2683
 const max_permissions = 0777
 
-func install() { //TODO: function is too long, need to break this up
+func install(db_path string) { //TODO: function is too long, need to break this up
 	if !directoryExists(storageDirectory) {
 		os.Mkdir(storageDirectory, max_permissions)
 		assert(directoryExists(storageDirectory), "storage directory not properly initialized")
@@ -36,7 +37,7 @@ func install() { //TODO: function is too long, need to break this up
 		getCharacterData(charactersToFetch)
 		assert(fileExists(storageDirectory+"/characterdata.json"), "failed to retrieve data for each character")
 	}
-	if !fileExists(dbPath) {
+	if !fileExists(db_path) {
 		charactersQuery := read_character_data("/characterdata.json")
 		wikimap := charactersQuery.Query.Pages
 		deck_entries, sapow_entries, satec_entries, bcd_entries := parse_wikitext(wikimap)
