@@ -415,12 +415,32 @@ func parse_starter_deck_rates(wikimap map[string]Page) {
 	}
 	wikislices_by_pool := splitter(wikislice, indices)
 	fmt.Println()
+	pools := []string{
+		"pool_sub_1100",
+		"pool_1100_1600",
+		"pool_1600_2100",
+		"pool_over_2100",
+		"pool_magic",
+		"pool_field_magic",
+	}
 	fmt.Println(wikislices_by_pool[0][0])
 	for _, line := range wikislices_by_pool[0] {
 		if !strings.Contains(line, ";") {
 			continue
 		}
 		fmt.Println(line)
+		line_slice := strings.Split(line, ";")
+		card := line_slice[0]
+		rate, err := strconv.Atoi(strings.ReplaceAll(line_slice[1], " ", ""))
+		if err != nil {
+			panic(err)
+		}
+		entry := Probability{
+			Id:   uuid.NewString(),
+			Card: card,
+			Rate: rate,
+		}
+		fmt.Println(pools, entry)
 	}
 }
 
