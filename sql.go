@@ -173,6 +173,18 @@ CREATE TABLE targets (
 	assert(tableExists("targets"), "targets table failed to properly initialize")
 }
 
+func initialize_cards_stars_table() {
+	assert(!tableExists("cards_stars"), "cards_stars table already exists")
+	sql_query := `
+CREATE TABLE cards_stars (
+    id TEXT PRIMARY KEY,
+    card TEXT,
+    star TEXT
+    );`
+	runSql(sql_query)
+	assert(tableExists("cards_stars"), "cards_stars table failed to properly initialize")
+}
+
 func WriteProbabilities(entries []Probability, table_name string) {
 	values_string := ""
 	for _, entry := range entries {
@@ -205,7 +217,6 @@ func write_targets_to_db(entries []Target, table_name string) {
 	}
 	values_string = values_string[2:]
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
-	fmt.Println(sql_query)
 	runSql(sql_query)
 	assert(!tableIsEmpty("targets"), "Something went wrong writing to the targets tables, no data was written")
 }
