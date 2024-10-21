@@ -33,6 +33,13 @@ type Card_Star struct {
 	Star string
 }
 
+type Material struct {
+	Id               string
+	Card             string
+	Fusion_Number    int
+	Resulting_Fusion string
+}
+
 type Probability struct {
 	Id   string
 	Duel string

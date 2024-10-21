@@ -367,6 +367,8 @@ func parse_fusions(wikimap map[string]Page) {
 		}
 	}
 	lines_by_fusion_number := splitter(v_slices_by_fusion[0], indices)
+	m1_entries := []Material{}
+	m2_entries := []Material{}
 	for _, section := range lines_by_fusion_number {
 		normalized := strings.ReplaceAll(section[0], " ", "")
 		fusion_number_rune := normalized[2]
@@ -384,7 +386,22 @@ func parse_fusions(wikimap map[string]Page) {
 				strings.Split(strings.Split(line, "[[")[1], "|")[0]))
 		}
 		fmt.Printf("%v f%v, m%v: %v\n", title, fusion_number, material_number, materials)
+		for _, material := range materials {
+			entry := Material{
+				Id:               uuid.NewString(),
+				Card:             material,
+				Fusion_Number:    fusion_number,
+				Resulting_Fusion: title,
+			}
+			if material_number == 1 {
+				m1_entries = append(m1_entries, entry)
+				continue
+			}
+			m2_entries = append(m2_entries, entry)
+		}
 	}
+	fmt.Println(m1_entries)
+	fmt.Println(m2_entries)
 }
 
 func splitter(string_slice []string, indices []int) [][]string {
