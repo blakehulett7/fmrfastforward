@@ -361,7 +361,15 @@ func parse_fusions(wikimap map[string]Page) {
 		}
 	}
 	lines_by_fusion_number := splitter(v_slices_by_fusion[0], indices)
-	fmt.Println(lines_by_fusion_number)
+	for _, section := range lines_by_fusion_number {
+		normalized := strings.ReplaceAll(section[0], " ", "")
+		fusion_number_rune := normalized[2]
+		fusion_number := int(fusion_number_rune - '0')
+		material_number_rune := normalized[5]
+		material_number := int(material_number_rune - '0')
+		fmt.Println(fusion_number, material_number)
+		fmt.Println()
+	}
 }
 
 func splitter(string_slice []string, indices []int) [][]string {
