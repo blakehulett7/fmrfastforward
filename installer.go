@@ -85,9 +85,13 @@ func getFmrData() { //TODO: function is too long, need to break this up
 		assert(tableExists("fusions"), "failed to initialize fusions table")
 	}
 
-	if !directoryExists(storageDirectory + "/fusions") {
+	if !fileExists(storageDirectory + "/fusions.json") {
 		get_fusions()
+		assert(fileExists(storageDirectory+"/fusions.json"), "fusion data was not properly written")
 	}
+
+	fusions_query := read_character_data("/fusions.json")
+	fmt.Println(fusions_query.Query.Pages)
 }
 
 func getFmrCharacters() {
@@ -124,7 +128,6 @@ func get_fusions() {
 		"List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions_(401–600)",
 		"List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions_(601–722)",
 		"Glitch_fusion",
-		"List_of_Yu-Gi-Oh!_Forbidden_Memories_fusion_groups",
 	}
 	string := ""
 	for _, title := range titles {

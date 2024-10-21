@@ -336,3 +336,7 @@ func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 	}
 	return cards, targets, cards_stars
 }
+
+func parse_fusions() {
+
+}
