@@ -21,7 +21,7 @@ const known_satec_table_length = 2917
 const known_bcd_table_length = 2683
 const max_permissions = 0777
 
-func getFmrData() { //TODO: function is too long, need to break this up
+func install() { //TODO: function is too long, need to break this up
 	if !directoryExists(storageDirectory) {
 		os.Mkdir(storageDirectory, max_permissions)
 		assert(directoryExists(storageDirectory), "storage directory not properly initialized")
