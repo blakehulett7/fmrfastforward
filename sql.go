@@ -202,6 +202,18 @@ CREATE TABLE cards_stars (
 	assert(tableExists("cards_stars"), "cards_stars table failed to properly initialize")
 }
 
+func initialize_starting_deck_rates_table() {
+	assert(!tableExists("starting_deck_rates"), "starting_deck_rates table already exists")
+	sql_query := `
+CREATE TABLE starting_deck_rates (
+    id TEXT PRIMARY KEY,
+    card TEXT,
+    rate int
+    );`
+	runSql(sql_query)
+	assert(tableExists("starting_deck_rates"), "starting_deck_rates table failed to properly initialize")
+}
+
 func WriteProbabilities(entries []Probability, table_name string) {
 	values_string := ""
 	for _, entry := range entries {

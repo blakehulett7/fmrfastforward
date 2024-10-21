@@ -95,6 +95,17 @@ func install(db_path string) { //TODO: function is too long, need to break this 
 		assert(!tableIsEmpty("m1"), "failed to properly write the m1 table")
 		assert(!tableIsEmpty("m2"), "failed to properly write the m2 table")
 	}
+
+	if !fileExists(storageDirectory + "/starter_deck_data.json") {
+		fetch_data("Initial_Deck_(FMR)", "/starter_deck_data.json")
+		assert(fileExists(storageDirectory+"/starter_deck_data.json"), "starter deck data was not retrieved")
+	}
+
+	if !tableExists("starting_deck_rates") {
+		initialize_starting_deck_rates_table()
+		starter_deck_query := read_character_data("/starter_deck_data.json")
+		parse_starter_deck_rates(starter_deck_query.Query.Pages)
+	}
 }
 
 func getFmrCharacters() {

@@ -401,6 +401,29 @@ func parse_fusions(wikimap map[string]Page) (m1_entries, m2_entries []Material) 
 	return m1_entries, m2_entries
 }
 
+func parse_starter_deck_rates(wikimap map[string]Page) {
+	wikitext_page := wikimap["610758"]
+	wikitext := wikitext_page.Revisions[0].Body
+	wikitext = strings.Split(wikitext, "== Pools ==")[1]
+	fmt.Println(wikitext)
+	wikislice := strings.Split(wikitext, "\n")
+	indices := []int{}
+	for index, line := range wikislice {
+		if strings.HasPrefix(line, "===") {
+			indices = append(indices, index)
+		}
+	}
+	wikislices_by_pool := splitter(wikislice, indices)
+	fmt.Println()
+	fmt.Println(wikislices_by_pool[0][0])
+	for _, line := range wikislices_by_pool[0] {
+		if !strings.Contains(line, ";") {
+			continue
+		}
+		fmt.Println(line)
+	}
+}
+
 func splitter(string_slice []string, indices []int) [][]string {
 	split_slice := [][]string{}
 	for index := range indices {

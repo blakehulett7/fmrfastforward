@@ -6,6 +6,6 @@ import (
 )
 
 func TestInstaller(t *testing.T) {
-	defer os.Remove(testdbPath)
-	install(testdbPath)
+	defer os.Remove(dbPath)
+	install(dbPath)
 }
