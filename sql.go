@@ -6,8 +6,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-
-	"github.com/google/uuid"
 )
 
 func runSql(sqlQuery string) {
@@ -163,12 +161,17 @@ func initialize_rate_table(table_name string) {
 	assert(tableExists(table_name), fmt.Sprintf("failed to initialize the %v table", table_name))
 }
 
-func initializeProbability(duel, cardId string) {
-	assert(!probabilityExists(duel, cardId), "probability already present in the db")
-	id := uuid.NewString()
-	sqlQuery := fmt.Sprintf("INSERT INTO probabilities(id, duel, card_id) VALUES('%v', '%v', '%v');", id, duel, cardId)
-	runSql(sqlQuery)
-	assert(probabilityExists(duel, cardId), "probability was not saved to the db properly")
+func initialize_targets_table() {
+	assert(!tableExists("targets"), "targets table already exists")
+	sql_query := `
+CREATE TABLE targets (
+    id TEXT PRIMARY KEY,
+    equip TEXT,
+    target TEXT,
+    UNIQUE(equip, target)
+    );`
+	runSql(sql_query)
+	assert(tableExists("targets"), "targets table failed to properly initialize")
 }
 
 func WriteProbabilities(entries []Probability, table_name string) {
@@ -193,4 +196,28 @@ func write_cards_to_db(entries []Card, table_name string) {
 	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
 	runSql(sql_query)
 	assert(!tableIsEmpty("cards"), "Something went wrong writing to the cards tables, no data was written")
+}
+
+func write_targets_to_db(entries []Target, table_name string) {
+	values_string := ""
+	for _, entry := range entries {
+		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", \"%v\")", entry.Id, entry.Equip, entry.Target)
+		values_string += entry_string
+	}
+	values_string = values_string[2:]
+	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
+	runSql(sql_query)
+	assert(!tableIsEmpty("targets"), "Something went wrong writing to the targets tables, no data was written")
+}
+
+func write_cards_stars_to_db(entries []Card_Star, table_name string) {
+	values_string := ""
+	for _, entry := range entries {
+		entry_string := fmt.Sprintf(", (\"%v\", \"%v\", \"%v\")", entry.Id, entry.Card, entry.Star)
+		values_string += entry_string
+	}
+	values_string = values_string[2:]
+	sql_query := fmt.Sprintf("INSERT INTO %v VALUES %v;", table_name, values_string)
+	runSql(sql_query)
+	assert(!tableIsEmpty("cards_stars"), "Something went wrong writing to the cards_stars tables, no data was written")
 }
