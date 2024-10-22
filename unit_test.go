@@ -13,3 +13,7 @@ func TestInstaller(t *testing.T) {
 	defer os.Remove(dbPath)
 	install(dbPath)
 }
+
+func TestGenerateStarterDeck(t *testing.T) {
+	generate_starting_deck()
+}
