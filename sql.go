@@ -207,8 +207,9 @@ func initialize_starting_deck_rates_table() {
 	sql_query := `
 CREATE TABLE starting_deck_rates (
     id TEXT PRIMARY KEY,
+    pool TEXT,
     card TEXT,
-    rate int
+    rate INTEGER
     );`
 	runSql(sql_query)
 	assert(tableExists("starting_deck_rates"), "starting_deck_rates table failed to properly initialize")

@@ -401,7 +401,7 @@ func parse_fusions(wikimap map[string]Page) (m1_entries, m2_entries []Material) 
 	return m1_entries, m2_entries
 }
 
-func parse_starter_deck_rates(wikimap map[string]Page) {
+func parse_starter_deck_rates(wikimap map[string]Page) []Probability {
 	wikitext_page := wikimap["610758"]
 	wikitext := wikitext_page.Revisions[0].Body
 	wikitext = strings.Split(wikitext, "== Pools ==")[1]
@@ -422,6 +422,7 @@ func parse_starter_deck_rates(wikimap map[string]Page) {
 		"pool_field_magic",
 		"pool_equip_magic",
 	}
+	entries := []Probability{}
 	for index, pool_slice := range wikislices_by_pool {
 		pool := pools[index]
 		for _, line := range pool_slice {
@@ -441,9 +442,10 @@ func parse_starter_deck_rates(wikimap map[string]Page) {
 				Card: card,
 				Rate: rate,
 			}
-			fmt.Println(entry)
+			entries = append(entries, entry)
 		}
 	}
+	return entries
 }
 
 func splitter(string_slice []string, indices []int) [][]string {

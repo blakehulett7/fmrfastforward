@@ -104,7 +104,9 @@ func install(db_path string) { //TODO: function is too long, need to break this 
 	if !tableExists("starting_deck_rates") {
 		initialize_starting_deck_rates_table()
 		starter_deck_query := read_character_data("/starter_deck_data.json")
-		parse_starter_deck_rates(starter_deck_query.Query.Pages)
+		entries := parse_starter_deck_rates(starter_deck_query.Query.Pages)
+		WriteProbabilities(entries, "starting_deck_rates")
+		assert(!tableIsEmpty("starting_deck_rates"), "failed to properly write the starter deck rates table")
 	}
 }
 
