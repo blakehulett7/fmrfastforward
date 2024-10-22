@@ -104,16 +104,6 @@ func get_potential_fusions(card_name string) []string {
 	return []string{}
 }
 
-func getProbabilityId(duel, cardId string) string {
-	assert(probabilityExists(duel, cardId), "can't get an id for a probability not yet in the db")
-	sqlQuery := fmt.Sprintf("SELECT id FROM probabilities WHERE duel = '%v' AND card_id = '%v';", duel, cardId)
-	data, err := outputSql(sqlQuery)
-	if err != nil {
-		panic("Something went wrong getting this probability id")
-	}
-	return strings.ReplaceAll(string(data), "\n", "")
-}
-
 func initializeDB() {
 	assert(!fileExists(storageDirectory+"/database.db"), "db file already exists...")
 	sqlQuery := `
