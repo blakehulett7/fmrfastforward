@@ -7,9 +7,9 @@ import (
 
 func TestInstaller(t *testing.T) {
 	if fileExists(dbPath) {
-		os.Rename(dbPath, testdbPath)
+		os.Rename(dbPath, dbHoldingPath)
 		t.Cleanup(func() {
-			os.Rename(testdbPath, dbPath)
+			os.Rename(dbHoldingPath, dbPath)
 		})
 	}
 	defer os.Remove(dbPath)

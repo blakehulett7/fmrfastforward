@@ -14,6 +14,7 @@ import (
 const storageDirectory = "fmrfastforward"
 const dbPath = storageDirectory + "/database.db"
 const testdbPath = storageDirectory + "/test.db"
+const dbHoldingPath = storageDirectory + "/holding.db"
 const apiHeader = "speedrun bot, email: blake.hulett7@gmail.com"
 const known_character_length = 42
 const known_deck_table_length = 3649
