@@ -17,11 +17,12 @@ func (sim *simulation) increment_seed() {
 func (sim simulation) generate_starting_deck() {
 	pool_sub_1100 := get_starting_deck_rates("pool_sub_1100")
 	//pool_1100_1600 := get_starting_deck_rates("pool_1100_1600")
-
-	fmt.Println(sim.drop_card(pool_sub_1100))
+	for i := 0; i < 16; i++ {
+		fmt.Println(i, sim.drop_card(pool_sub_1100))
+	}
 }
 
-func (sim simulation) drop_card(drop_table []Probability) (card_name string) {
+func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {
 	source := rand.NewPCG(sim.current_seed, 0)
 	rng := rand.New(source)
 	table_selector := rng.IntN(2048)
