@@ -129,6 +129,30 @@ func get_starting_deck_rates(pool_name string) []Probability {
 	return pool_entries
 }
 
+func get_cards(cards_to_get []string) []Card {
+	in_string := ""
+	for _, card := range cards_to_get {
+		in_string += fmt.Sprintf(", \"%v\"", card)
+	}
+	in_string = in_string[2:]
+	sql_query := fmt.Sprintf("SELECT * FROM cards WHERE name IN (%v);", in_string)
+	data, err := outputSql(sql_query)
+	if err != nil {
+		panic(err)
+	}
+	data_list := strings.Split(string(data), "\n")
+	data_list = data_list[:len(data_list)-1]
+	for _, entry := range data_list {
+		entry_array := strings.Split(entry, "|")
+		card := Card{
+			Id:   entry_array[0],
+			Name: entry_array[1],
+			Type: entry_array[2],
+		}
+	}
+	return []Card{}
+}
+
 func initializeDB() {
 	assert(!fileExists(storageDirectory+"/database.db"), "db file already exists...")
 	sqlQuery := `

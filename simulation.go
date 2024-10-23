@@ -36,7 +36,8 @@ func (sim simulation) generate_starting_deck() {
 	cards_to_get = append(cards_to_get, sim.get_cards_from_pool(pool_equip_magic, 1)...)
 
 	assert(len(cards_to_get) == 40, "bug generating the starting deck, did not get exactly 40 cards to grab from the db")
-	fmt.Println(cards_to_get)
+	get_cards(cards_to_get)
+	fmt.Println()
 }
 
 func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {
