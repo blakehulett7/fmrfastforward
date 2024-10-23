@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand/v2"
 )
 
@@ -14,7 +13,7 @@ func (sim *simulation) increment_seed() {
 	sim.current_seed++
 }
 
-func (sim simulation) generate_starting_deck() {
+func (sim simulation) generate_starting_deck() []Card {
 	cards_to_get := []string{}
 
 	pool_sub_1100 := get_starting_deck_rates("pool_sub_1100")
@@ -36,8 +35,7 @@ func (sim simulation) generate_starting_deck() {
 	cards_to_get = append(cards_to_get, sim.get_cards_from_pool(pool_equip_magic, 1)...)
 
 	assert(len(cards_to_get) == 40, "bug generating the starting deck, did not get exactly 40 cards to grab from the db")
-	get_cards(cards_to_get)
-	fmt.Println()
+	return get_cards(cards_to_get)
 }
 
 func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {

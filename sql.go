@@ -130,6 +130,7 @@ func get_starting_deck_rates(pool_name string) []Probability {
 }
 
 func get_cards(cards_to_get []string) []Card {
+	cards := []Card{}
 	in_string := ""
 	for _, card := range cards_to_get {
 		in_string += fmt.Sprintf(", \"%v\"", card)
@@ -144,13 +145,26 @@ func get_cards(cards_to_get []string) []Card {
 	data_list = data_list[:len(data_list)-1]
 	for _, entry := range data_list {
 		entry_array := strings.Split(entry, "|")
-		card := Card{
-			Id:   entry_array[0],
-			Name: entry_array[1],
-			Type: entry_array[2],
+		int_array := []int{}
+		for _, number_string := range entry_array[3:] {
+			num, err := strconv.Atoi(strings.TrimSpace(number_string))
+			if err != nil {
+				int_array = append(int_array, 0)
+				continue
+			}
+			int_array = append(int_array, num)
 		}
+		card := Card{
+			Id:        entry_array[0],
+			Name:      entry_array[1],
+			Type:      entry_array[2],
+			Attack:    int_array[0],
+			Defense:   int_array[1],
+			StarChips: int_array[2],
+		}
+		cards = append(cards, card)
 	}
-	return []Card{}
+	return cards
 }
 
 func initializeDB() {
