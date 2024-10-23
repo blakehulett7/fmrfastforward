@@ -6,8 +6,8 @@ import (
 )
 
 type simulation struct {
-	seed         uint64
-	current_seed uint64
+	starting_seed uint64
+	current_seed  uint64
 }
 
 func (sim *simulation) increment_seed() {
@@ -16,10 +16,10 @@ func (sim *simulation) increment_seed() {
 
 func (sim simulation) generate_starting_deck() {
 	pool_sub_1100 := get_starting_deck_rates("pool_sub_1100")
-	//pool_1100_1600 := get_starting_deck_rates("pool_1100_1600")
-	for i := 0; i < 16; i++ {
-		fmt.Println(i, sim.drop_card(pool_sub_1100))
-	}
+	pool_1100_1600 := get_starting_deck_rates("pool_1100_1600")
+
+	fmt.Println(sim.get_cards_from_pool(pool_sub_1100, 16))
+	fmt.Println(sim.get_cards_from_pool(pool_1100_1600, 16))
 }
 
 func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {
@@ -34,4 +34,12 @@ func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {
 		}
 	}
 	panic("Something went wrong, no card was chosen from the drop table")
+}
+
+func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []string {
+	cards := []string{}
+	for i := 0; i < num_cards; i++ {
+		cards = append(cards, sim.drop_card(pool))
+	}
+	return cards
 }

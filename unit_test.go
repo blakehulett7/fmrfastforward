@@ -17,6 +17,6 @@ func TestInstaller(t *testing.T) {
 */
 
 func TestGenerateStarterDeck(t *testing.T) {
-	sim := simulation{seed: 1, current_seed: 1}
+	sim := simulation{starting_seed: 1, current_seed: 1}
 	sim.generate_starting_deck()
 }
