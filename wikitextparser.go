@@ -195,7 +195,7 @@ func parse_deck_text(deck_text_by_duel []WikiSection, duel_title string) []Proba
 			entry := Probability{
 				Id:   id,
 				Duel: duel,
-				Card: strings.ReplaceAll(card, "#", ""),
+				Card: card,
 				Rate: rate,
 			}
 			entries = append(entries, entry)
@@ -279,9 +279,8 @@ func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 		if card_text.Title == "Ray" {
 			continue
 		}
-		card_name := strings.ReplaceAll(card_text.Title, "#", "")
 		id := uuid.NewString()
-		card := Card{Id: id, Name: card_name}
+		card := Card{Id: id, Name: card_text.Title}
 		my_targets := []Target{}
 		my_stars := []Card_Star{}
 		lines := strings.Split(card_text.Revisions[0].Body, "\n")
@@ -313,12 +312,12 @@ func parse_cards(wikimap map[string]Page) ([]Card, []Target, []Card_Star) {
 				stars := strings.Split(strings.ReplaceAll(strings.Split(line, "=")[1], " ", ""), "/")
 				my_stars = append(my_stars, Card_Star{
 					Id:   uuid.NewString(),
-					Card: card_name,
+					Card: card_text.Title,
 					Star: stars[0],
 				})
 				my_stars = append(my_stars, Card_Star{
 					Id:   uuid.NewString(),
-					Card: card_name,
+					Card: card_text.Title,
 					Star: stars[1],
 				})
 

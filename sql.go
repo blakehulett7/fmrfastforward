@@ -129,24 +129,10 @@ func get_starting_deck_rates(pool_name string) []Probability {
 	return pool_entries
 }
 
-func get_card(card_to_get string) Card {
-	sql_query := fmt.Sprintf("SELECT * FROM cards WHERE name = \"%v\"", card_to_get)
-	data, err := outputSql(sql_query)
-	if err != nil {
-		panic(fmt.Sprintf("Bug, could not retrieve %v from db", card_to_get))
-	}
-	entry := strings.ReplaceAll(string(data), "\n", "")
-	fmt.Println(entry)
-	return Card{}
-}
-
 func get_cards(cards_to_get []string) []Card {
-	assert(len(cards_to_get) == 40, "bug: should have 40 cards to get")
-
 	cards := []Card{}
 	in_string := ""
 	for _, card := range cards_to_get {
-		fmt.Println(card)
 		in_string += fmt.Sprintf(", \"%v\"", card)
 	}
 	in_string = in_string[2:]
@@ -155,10 +141,8 @@ func get_cards(cards_to_get []string) []Card {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(data))
 	data_list := strings.Split(string(data), "\n")
 	data_list = data_list[:len(data_list)-1]
-	assert(len(data_list) == 40, "bug: should be 40 cards gotten")
 	for _, entry := range data_list {
 		entry_array := strings.Split(entry, "|")
 		int_array := []int{}
