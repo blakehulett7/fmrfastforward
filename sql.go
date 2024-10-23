@@ -104,6 +104,31 @@ func get_potential_fusions(card_name string) []string {
 	return []string{}
 }
 
+func get_starting_deck_rates(pool_name string) []Probability {
+	sql_query := fmt.Sprintf("SELECT * FROM starting_deck_rates WHERE pool = '%v' ORDER BY card;", pool_name)
+	data, err := outputSql(sql_query)
+	if err != nil {
+		panic(err)
+	}
+	data_list := strings.Split(string(data), "\n")
+	data_list = data_list[:len(data_list)-1]
+	pool_entries := []Probability{}
+	for _, entry := range data_list {
+		entry_array := strings.Split(entry, "|")
+		rate, err := strconv.Atoi(strings.TrimSpace(entry_array[3]))
+		if err != nil {
+			panic(err)
+		}
+		pool_entries = append(pool_entries, Probability{
+			Id:   entry_array[0],
+			Duel: entry_array[1],
+			Card: entry_array[2],
+			Rate: rate,
+		})
+	}
+	return pool_entries
+}
+
 func initializeDB() {
 	assert(!fileExists(storageDirectory+"/database.db"), "db file already exists...")
 	sqlQuery := `
