@@ -18,19 +18,22 @@ func evaluate_starting_deck(starting_deck []Card) {
 	}
 
 	fusions := []Fusion{}
-	fusions_map := map[string][]string{}
 	for _, card := range cards {
 		for _, target_card := range cards {
 			for _, fusion := range card.m1_potential {
 				if slices.Contains(target_card.m2_potential, fusion) {
 					//fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
-					fusion_name := strings.Split(fusion, "|")[0]
-					_, exists := fusions_map[fusion_name]
-					if !exists {
-						fusions_map[fusion_name] = []string{fusion_name}
-						continue
+					fusion_card := get_card(strings.Split(fusion, "|")[0])
+					fusion := Fusion{
+						Name:    fusion_card.Name,
+						Attack:  fusion_card.Attack,
+						Defense: fusion_card.Defense,
+						m1:      card.Name,
+						m2:      target_card.Name,
 					}
-					fusions_map[fusion_name] = append(fusions_map[fusion_name], fusion_name)
+					if !slices.Contains(fusions, fusion) {
+						fusions = append(fusions, fusion)
+					}
 				}
 			}
 		}
