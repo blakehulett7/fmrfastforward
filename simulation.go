@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand/v2"
 )
 
@@ -36,11 +35,11 @@ func (sim simulation) generate_starting_deck() []Card {
 	cards_to_get = append(cards_to_get, sim.get_cards_from_pool(pool_equip_magic, 1)...)
 
 	assert(len(cards_to_get) == 40, "bug generating the starting deck, did not get exactly 40 cards to grab from the db")
+	deck := []Card{}
 	for _, card := range cards_to_get {
-		fmt.Println(card)
-		get_card(card)
+		deck = append(deck, get_card(card))
 	}
-	return []Card{}
+	return deck
 }
 
 func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {
@@ -60,7 +59,18 @@ func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {
 func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []string {
 	cards := []string{}
 	for i := 0; i < num_cards; i++ {
-		cards = append(cards, sim.drop_card(pool))
+		var card string
+		for {
+			card = sim.drop_card(pool)
+			if count_instances_in_slice(cards, card) < 3 {
+				break
+			}
+		}
+		cards = append(cards, card)
+	}
+
+	for _, card := range cards {
+		assert(count_instances_in_slice(cards, card) < 4, "Can't have more than 3 of the same card in a deck")
 	}
 	return cards
 }

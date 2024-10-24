@@ -22,6 +22,15 @@ func outputSql(sqlQuery string) ([]byte, error) {
 	return exec.Command("bash", "-c", command).Output()
 }
 
+func list_sql(sql_query string) []string {
+	data, err := outputSql(sql_query)
+	if err != nil {
+		panic(fmt.Sprintf("bug running the following sql query: %v", sql_query))
+	}
+	data_slice := strings.Split(string(data), "\n")
+	return data_slice[:len(data_slice)-1]
+}
+
 func tableExists(tableName string) bool {
 	sqlQuery := fmt.Sprintf("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='%v';", tableName)
 	data, err := outputSql(sqlQuery)
@@ -97,11 +106,11 @@ func getCardId(cardName string) string {
 	return strings.ReplaceAll(string(data), "\n", "")
 }
 
-func get_potential_fusions(card_name string) []string {
+func get_potential_fusions(card_name string, m_table string) []string {
 	assert(cardExists(card_name), fmt.Sprintf("%v is not in the cards database, shutting down...", card_name))
-	sql_query := fmt.Sprintf("SELECT resulting_fusion FROM m1 WHERE card = \"%v\";", card_name)
-	fmt.Println(sql_query)
-	return []string{}
+
+	sql_query := fmt.Sprintf("SELECT resulting_fusion, fusion_number FROM %v WHERE card = \"%v\";", m_table, card_name)
+	return list_sql(sql_query)
 }
 
 func get_starting_deck_rates(pool_name string) []Probability {
@@ -133,10 +142,35 @@ func get_card(card_to_get string) Card {
 	sql_query := fmt.Sprintf("SELECT * FROM cards WHERE name = \"%v\";", card_to_get)
 	data, err := outputSql(sql_query)
 	if err != nil {
+		fmt.Println("err")
 		return Card{}
 	}
-	fmt.Println(strings.ReplaceAll(string(data), "\n", ""))
-	return Card{}
+
+	// Temporary for manually adding missing cards, will fix
+	if string(data) == "" {
+		panic(fmt.Sprintf("Manually add %v", card_to_get))
+	}
+
+	stringified_data := strings.ReplaceAll(string(data), "\n", "")
+	data_slice := strings.Split(stringified_data, "|")
+	int_slice := []int{}
+	for _, num_string := range data_slice[3:] {
+		num, err := strconv.Atoi(num_string)
+		if err != nil {
+			int_slice = append(int_slice, 0)
+			continue
+		}
+		int_slice = append(int_slice, num)
+	}
+	card := Card{
+		Id:        data_slice[0],
+		Name:      data_slice[1],
+		Type:      data_slice[2],
+		Attack:    int_slice[0],
+		Defense:   int_slice[1],
+		StarChips: int_slice[2],
+	}
+	return card
 }
 
 func get_cards(cards_to_get []string) []Card {

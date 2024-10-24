@@ -12,6 +12,9 @@ type Card struct {
 	Attack    int
 	Defense   int
 	StarChips int
+
+	m1_potential []string
+	m2_potential []string
 }
 
 type Target struct {
