@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand/v2"
 )
 
@@ -73,4 +74,13 @@ func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []s
 		assert(count_instances_in_slice(cards, card) < 4, "Can't have more than 3 of the same card in a deck")
 	}
 	return cards
+}
+
+func (sim simulation) draw_cards(deck []Card, number int) {
+	for i := 0; i < number; i++ {
+		card_index := rand.IntN(len(deck))
+		sim.increment_seed()
+		fmt.Print(deck[card_index].Name, ", ")
+		deck = append(deck[:card_index], deck[card_index+1:]...)
+	}
 }
