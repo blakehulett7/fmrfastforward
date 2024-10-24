@@ -49,7 +49,11 @@ func evaluate_starting_deck(starting_deck []Card) {
 	slices.SortFunc(deck_by_atk, func(a Card, b Card) int {
 		return b.Attack - a.Attack
 	})
+	var chances_to_draw float64
 	for _, card := range deck_by_atk {
-		fmt.Println(card.Name, card.Attack)
+		chances_to_draw++
+		chance_to_not_draw := 40 - chances_to_draw
+		first_hand_percent_change_to_draw := (1 - ((chance_to_not_draw / 40.0) * ((chance_to_not_draw - 1) / 39.0) * ((chance_to_not_draw - 2) / 38.0) * ((chance_to_not_draw - 3) / 37.0) * ((chance_to_not_draw - 4) / 36.0))) * 100
+		fmt.Println(card.Name, card.Attack, fmt.Sprintf("%.2f%%", first_hand_percent_change_to_draw))
 	}
 }
