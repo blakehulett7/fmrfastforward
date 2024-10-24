@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand/v2"
 )
 
@@ -35,7 +36,11 @@ func (sim simulation) generate_starting_deck() []Card {
 	cards_to_get = append(cards_to_get, sim.get_cards_from_pool(pool_equip_magic, 1)...)
 
 	assert(len(cards_to_get) == 40, "bug generating the starting deck, did not get exactly 40 cards to grab from the db")
-	return get_cards(cards_to_get)
+	for _, card := range cards_to_get {
+		fmt.Println(card)
+		get_card(card)
+	}
+	return []Card{}
 }
 
 func (sim *simulation) drop_card(drop_table []Probability) (card_name string) {

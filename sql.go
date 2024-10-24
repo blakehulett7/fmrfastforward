@@ -129,6 +129,16 @@ func get_starting_deck_rates(pool_name string) []Probability {
 	return pool_entries
 }
 
+func get_card(card_to_get string) Card {
+	sql_query := fmt.Sprintf("SELECT * FROM cards WHERE name = \"%v\";", card_to_get)
+	data, err := outputSql(sql_query)
+	if err != nil {
+		return Card{}
+	}
+	fmt.Println(strings.ReplaceAll(string(data), "\n", ""))
+	return Card{}
+}
+
 func get_cards(cards_to_get []string) []Card {
 	cards := []Card{}
 	in_string := ""

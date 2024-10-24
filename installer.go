@@ -76,6 +76,7 @@ func install(db_path string) { //TODO: function is too long, need to break this 
 			initialize_cards_stars_table()
 			cards_wikimap := read_cards_data("/cards")
 			cards, targets, cards_stars := parse_cards(cards_wikimap)
+			fmt.Println(len(cards))
 			write_cards_to_db(cards, "cards")
 			write_targets_to_db(targets, "targets") // Need to manually add bright castle and megamorph for calculations
 			write_cards_stars_to_db(cards_stars, "cards_stars")
