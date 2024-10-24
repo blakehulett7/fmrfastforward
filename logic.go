@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 )
 
@@ -23,13 +24,16 @@ func evaluate_starting_deck(starting_deck []Card) {
 			for _, fusion := range card.m1_potential {
 				if slices.Contains(target_card.m2_potential, fusion) {
 					//fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
-					fusion_card := get_card(strings.Split(fusion, "|")[0])
+					fusion_card := get_card(strings.Split(fusion, "|")[0]) //Huge performace hit here just fyi
+					num, _ := strconv.Atoi(strings.Split(fusion, "|")[1])
+					assert(num > 0, "bad conversion")
 					fusion := Fusion{
-						Name:    fusion_card.Name,
-						Attack:  fusion_card.Attack,
-						Defense: fusion_card.Defense,
-						m1:      card.Name,
-						m2:      target_card.Name,
+						Name:          fusion_card.Name,
+						Attack:        fusion_card.Attack,
+						Defense:       fusion_card.Defense,
+						fusion_number: num,
+						m1:            card.Name,
+						m2:            target_card.Name,
 					}
 					if !slices.Contains(fusions, fusion) {
 						fusions = append(fusions, fusion)
@@ -49,7 +53,7 @@ func evaluate_starting_deck(starting_deck []Card) {
 		chance_to_not_draw := 40 - chance_to_draw
 		first_hand_percent_change_to_draw := (1 - ((chance_to_not_draw / 40.0) * ((chance_to_not_draw - 1) / 39.0))) * 100
 		percent_chance += first_hand_percent_change_to_draw
-		fmt.Println(card.Name, card.Attack, card.m1, card.m2)
+		fmt.Println(card.Name, card.Attack, card.fusion_number, card.m1, card.m2)
 	}
 	fmt.Println()
 

@@ -44,11 +44,12 @@ type Material struct {
 }
 
 type Fusion struct {
-	Name    string
-	Attack  int
-	Defense int
-	m1      string
-	m2      string
+	Name          string
+	Attack        int
+	Defense       int
+	fusion_number int
+	m1            string
+	m2            string
 }
 
 type Probability struct {
