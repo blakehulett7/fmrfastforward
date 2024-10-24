@@ -43,6 +43,14 @@ type Material struct {
 	Card             string
 }
 
+type Fusion struct {
+	Name    string
+	Attack  int
+	Defense int
+	m1      string
+	m2      string
+}
+
 type Probability struct {
 	Id   string
 	Duel string

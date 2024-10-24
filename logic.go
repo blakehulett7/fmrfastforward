@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"slices"
+	"strings"
 )
 
 func evaluate_starting_deck(starting_deck []Card) {
@@ -16,25 +17,37 @@ func evaluate_starting_deck(starting_deck []Card) {
 		cards = append(cards, card)
 	}
 
+	fusions := []Fusion{}
 	for _, card := range cards {
 		for _, target_card := range cards {
 			for _, fusion := range card.m1_potential {
 				if slices.Contains(target_card.m2_potential, fusion) {
-					fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
+					//fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
+					fusion_card := get_card(strings.Split(fusion, "|")[0])
+					fusions = append(fusions, Fusion{
+						Name:    fusion_card.Name,
+						Attack:  fusion_card.Attack,
+						Defense: fusion_card.Defense,
+						m1:      card.Name,
+						m2:      target_card.Name,
+					})
 				}
 			}
 		}
 	}
 
+	fusions_by_atk := fusions
+	slices.SortFunc(fusions_by_atk, func(a Fusion, b Fusion) int {
+		return b.Attack - a.Attack
+	})
+	for _, card := range fusions {
+		fmt.Println(card.Name, card.Attack)
+	}
+	fmt.Println()
+
 	deck_by_atk := starting_deck
 	slices.SortFunc(deck_by_atk, func(a Card, b Card) int {
-		if a.Attack < b.Attack {
-			return 1
-		}
-		if a.Attack == b.Attack {
-			return 0
-		}
-		return -1
+		return b.Attack - a.Attack
 	})
 	for _, card := range deck_by_atk {
 		fmt.Println(card.Name, card.Attack)

@@ -3,7 +3,6 @@ package main
 import (
 	//"os"
 	"testing"
-	//"github.com/google/uuid"
 )
 
 /*
@@ -18,8 +17,18 @@ func TestInstaller(t *testing.T) {
 */
 
 // This is a scuffed solution to a problem I don't want to actually solve right now
+/*
 func TestWriteCard(t *testing.T) {
+	write_cards_to_db([]Card{{
+		Id:        uuid.NewString(),
+		Name:      "Dragoness the Wicked Knight (FMR)",
+		Type:      "Warrior",
+		Attack:    1200,
+		Defense:   900,
+		StarChips: 60,
+	}}, "cards")
 }
+*/
 
 func TestGenerateStarterDeck(t *testing.T) {
 	sim := simulation{starting_seed: 1, current_seed: 1}
