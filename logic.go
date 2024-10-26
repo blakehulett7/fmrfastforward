@@ -90,4 +90,9 @@ func evaluate_starting_deck(starting_deck []Card) {
 	fmt.Println()
 	sim := simulation{starting_seed: 1, current_seed: 1} //temporary
 	sim.draw_cards(starting_deck, 5)
+
+	fmt.Println(odds_of_drawing_fusion(Fusion{
+		m1_components: []string{"1", "2"},
+		m2_components: []string{"3", "4"},
+	}, 5))
 }

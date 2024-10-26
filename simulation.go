@@ -83,4 +83,5 @@ func (sim simulation) draw_cards(deck []Card, number int) {
 		fmt.Print(deck[card_index].Name, ", ")
 		deck = append(deck[:card_index], deck[card_index+1:]...)
 	}
+	fmt.Print("\n")
 }
