@@ -48,12 +48,8 @@ type Fusion struct {
 	Attack        int
 	Defense       int
 	fusion_number int
-
-	m1 string
-	m2 string
-
-	m1_components int
-	m2_components int
+	m1_components []string
+	m2_components []string
 }
 
 type Probability struct {

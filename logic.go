@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"slices"
-	//"strconv"
-	//"strings"
+	"strconv"
+	"strings"
 )
 
 func evaluate_starting_deck(starting_deck []Card) {
@@ -34,18 +34,15 @@ func evaluate_starting_deck(starting_deck []Card) {
 					}
 
 					/*
-						fusion_card := get_card(strings.Split(fusion, "|")[0]) //Huge performace hit here just fyi, solution in concurrency?
-						num, _ := strconv.Atoi(strings.Split(fusion, "|")[1])
-						assert(num > 0, "bad conversion")
 
-							fusion := Fusion{
-								Name:          fusion_card.Name,
-								Attack:        fusion_card.Attack,
-								Defense:       fusion_card.Defense,
-								fusion_number: num,
-								m1:            card.Name,
-								m2:            target_card.Name,
-							}
+						fusion := Fusion{
+							Name:          fusion_card.Name,
+							Attack:        fusion_card.Attack,
+							Defense:       fusion_card.Defense,
+							fusion_number: num,
+							m1:            card.Name,
+							m2:            target_card.Name,
+						}
 					*/
 				}
 			}
@@ -56,6 +53,14 @@ func evaluate_starting_deck(starting_deck []Card) {
 	fmt.Println(fusion_map_m2)
 
 	fusions := []Fusion{}
+	for fusion, m1_components := range fusion_map_m1 {
+		m2_components := fusion_map_m2[fusion]
+		fmt.Printf("Fusion: %v, m1's: %v, m2's: %v\n", fusion, m1_components, m2_components)
+
+		fusion_card := get_card(strings.Split(fusion, "|")[0]) //Huge performace hit here just fyi, solution in concurrency?
+		num, _ := strconv.Atoi(strings.Split(fusion, "|")[1])
+		assert(num > 0, "bad conversion")
+	}
 
 	fusions_by_atk := fusions
 	/*
