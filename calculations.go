@@ -1,11 +1,32 @@
 package main
 
-import "github.com/montanaflynn/stats"
+import (
+	"fmt"
+	"slices"
+
+	"github.com/montanaflynn/stats"
+)
 
 func add_fusion_odds(fusion_1, fusion_2 Fusion) float64 {
 	odds_1 := odds_of_drawing_fusion(fusion_1, 5)
 	odds_2 := odds_of_drawing_fusion(fusion_2, 5)
-    overlapping_odds := 
+
+	overlapping_m1 := []string{}
+	for _, m1 := range fusion_1.m1_components {
+		if slices.Contains(fusion_2.m1_components, m1) {
+			overlapping_m1 = append(overlapping_m1, m1)
+		}
+	}
+	fmt.Println(overlapping_m1)
+
+	overlapping_m2 := []string{}
+	for _, m2 := range fusion_1.m2_components {
+		if slices.Contains(fusion_2.m2_components, m2) {
+			overlapping_m2 = append(overlapping_m2, m2)
+		}
+	}
+	fmt.Println(overlapping_m2)
+
 	return odds_1 + odds_2
 }
 
