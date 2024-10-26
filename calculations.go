@@ -2,6 +2,13 @@ package main
 
 import "github.com/montanaflynn/stats"
 
+func add_fusion_odds(fusion_1, fusion_2 Fusion) float64 {
+	odds_1 := odds_of_drawing_fusion(fusion_1, 5)
+	odds_2 := odds_of_drawing_fusion(fusion_2, 5)
+    overlapping_odds := 
+	return odds_1 + odds_2
+}
+
 func odds_of_drawing_fusion(fusion Fusion, draws int) float64 {
 	ways_to_draw_an_m1 := ways_to_draw_at_least_n_cards(len(fusion.m1_components), draws)
 	ways_to_draw_an_m2 := ways_to_draw_at_least_n_cards(len(fusion.m2_components), draws)
