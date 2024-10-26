@@ -17,7 +17,7 @@ func add_fusion_odds(fusion_1, fusion_2 Fusion) float64 {
 			overlapping_m1 = append(overlapping_m1, m1)
 		}
 	}
-	fmt.Println(overlapping_m1)
+	//fmt.Println(overlapping_m1)
 
 	overlapping_m2 := []string{}
 	for _, m2 := range fusion_1.m2_components {
@@ -25,7 +25,10 @@ func add_fusion_odds(fusion_1, fusion_2 Fusion) float64 {
 			overlapping_m2 = append(overlapping_m2, m2)
 		}
 	}
-	fmt.Println(overlapping_m2)
+	//fmt.Println(overlapping_m2)
+
+	overlapping_odds := odds_1 * odds_2
+	fmt.Println(overlapping_odds)
 
 	return odds_1 + odds_2
 }
