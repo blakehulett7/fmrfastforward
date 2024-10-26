@@ -68,9 +68,10 @@ func evaluate_starting_deck(starting_deck []Card) {
 	})
 
 	var chance_to_draw float64
-	var percent_chance float64
 	for _, card := range fusions_by_atk {
-		fmt.Println(card.Name, card.Attack, card.fusion_number, card.m1_components, card.m2_components, odds_of_drawing_fusion(card, 5))
+		chance_to_draw = odds_of_drawing_fusion(card, 5)
+		chance_to_draw *= 100
+		fmt.Println(card.Name, card.Attack, card.fusion_number, card.m1_components, card.m2_components, fmt.Sprintf("%.2f%%", chance_to_draw))
 	}
 	fmt.Println()
 
