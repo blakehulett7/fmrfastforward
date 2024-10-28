@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func evaluate_starting_deck(starting_deck []Card) {
+func evaluate_starting_deck(starting_deck [40]Card) {
 	assert(len(starting_deck) == 40, "Decks must have exactly 40 cards")
 
 	card_counts := count_my_cards(starting_deck)
@@ -84,7 +84,7 @@ func evaluate_starting_deck(starting_deck []Card) {
 	}
 	fmt.Println()
 
-	deck_by_atk := starting_deck
+	deck_by_atk := starting_deck[:]
 	slices.SortFunc(deck_by_atk, func(a Card, b Card) int {
 		return b.Attack - a.Attack
 	})
@@ -116,7 +116,7 @@ func evaluate_starting_deck(starting_deck []Card) {
 	fmt.Println()
 }
 
-func count_my_cards(deck []Card) map[string]int {
+func count_my_cards(deck [40]Card) map[string]int {
 	counts := map[string]int{}
 	for _, card := range deck {
 		_, exists := counts[card.Name]

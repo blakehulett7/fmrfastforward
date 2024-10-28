@@ -14,7 +14,7 @@ func (sim *simulation) increment_seed() {
 	sim.current_seed++
 }
 
-func (sim simulation) generate_starting_deck() []Card {
+func (sim simulation) generate_starting_deck() [40]Card {
 	cards_to_get := []string{}
 
 	pool_sub_1100 := get_starting_deck_rates("pool_sub_1100")
@@ -36,9 +36,10 @@ func (sim simulation) generate_starting_deck() []Card {
 	cards_to_get = append(cards_to_get, sim.get_cards_from_pool(pool_equip_magic, 1)...)
 
 	assert(len(cards_to_get) == 40, "bug generating the starting deck, did not get exactly 40 cards to grab from the db")
-	deck := []Card{}
-	for _, card := range cards_to_get {
-		deck = append(deck, get_card(card))
+
+	deck := [40]Card{}
+	for idx, card := range cards_to_get {
+		deck[idx] = get_card(card)
 	}
 	return deck
 }
@@ -76,14 +77,15 @@ func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []s
 	return cards
 }
 
-func (sim simulation) draw_cards(deck []Card, number int) {
+func (sim *simulation) draw_cards(deck []Card, number int) {
 	for i := 0; i < number; i++ {
 		source := rand.NewPCG(sim.current_seed, 0)
 		rng := rand.New(source)
 		card_index := rng.IntN(len(deck))
-		sim.increment_seed()
+		fmt.Print(card_index)
 		fmt.Print(deck[card_index].Name, ", ")
 		deck = append(deck[:card_index], deck[card_index+1:]...)
+		sim.current_seed++
 	}
 	fmt.Println()
 	fmt.Println()
