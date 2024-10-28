@@ -10,6 +10,8 @@ import (
 func evaluate_starting_deck(starting_deck []Card) {
 	assert(len(starting_deck) == 40, "Decks must have exactly 40 cards")
 
+	card_counts := count_my_cards(starting_deck)
+
 	cards := []Card{}
 	for _, card := range starting_deck {
 		card.m1_potential = get_potential_fusions(card.Name, "m1")
@@ -26,11 +28,17 @@ func evaluate_starting_deck(starting_deck []Card) {
 				if slices.Contains(target_card.m2_potential, fusion) {
 					//fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
 					if !slices.Contains(fusion_map_m1[fusion], card.Name) {
-						fusion_map_m1[fusion] = append(fusion_map_m1[fusion], card.Name)
+						count := card_counts[card.Name]
+						for i := 0; i < count; i++ {
+							fusion_map_m1[fusion] = append(fusion_map_m1[fusion], card.Name)
+						}
 					}
 
 					if !slices.Contains(fusion_map_m2[fusion], target_card.Name) {
-						fusion_map_m2[fusion] = append(fusion_map_m2[fusion], target_card.Name)
+						count := card_counts[target_card.Name]
+						for i := 0; i < count; i++ {
+							fusion_map_m2[fusion] = append(fusion_map_m2[fusion], target_card.Name)
+						}
 					}
 				}
 			}
@@ -42,6 +50,7 @@ func evaluate_starting_deck(starting_deck []Card) {
 
 	fusions := []Fusion{}
 	for fusion, m1_components := range fusion_map_m1 {
+
 		m2_components := fusion_map_m2[fusion]
 		//fmt.Printf("Fusion: %v, m1's: %v, m2's: %v\n", fusion, m1_components, m2_components)
 
@@ -98,4 +107,17 @@ func evaluate_starting_deck(starting_deck []Card) {
 	}, 5))
 	fmt.Println(add_fusion_odds(fusions_by_atk[0], fusions_by_atk[1]))
 	fmt.Println()
+}
+
+func count_my_cards(deck []Card) map[string]int {
+	counts := map[string]int{}
+	for _, card := range deck {
+		_, exists := counts[card.Name]
+		if exists {
+			counts[card.Name]++
+			continue
+		}
+		counts[card.Name] = 1
+	}
+	return counts
 }
