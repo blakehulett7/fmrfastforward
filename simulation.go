@@ -40,7 +40,10 @@ func (sim simulation) generate_starting_deck() [40]Card {
 
 	deck := [40]Card{}
 	for idx, card := range cards_to_get {
-		deck[idx] = get_card(card)
+		card_data := get_card(card)
+		card_data.m1_potential = get_potential_fusions(card, "m1")
+		card_data.m2_potential = get_potential_fusions(card, "m2")
+		deck[idx] = card_data
 	}
 	return deck
 }
@@ -78,7 +81,7 @@ func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []s
 	return cards
 }
 
-func (sim *simulation) draw_cards(deck []Card, number int) {
+func (sim *simulation) draw_cards(deck []Card, number int) (drawn_hand []Card) {
 	drawn_card_indexes := []int{}
 	for i := 0; i < number; i++ {
 		source := rand.NewPCG(sim.current_seed, 0)
@@ -89,11 +92,28 @@ func (sim *simulation) draw_cards(deck []Card, number int) {
 			i--
 			continue
 		}
-		fmt.Print(card_index)
-		fmt.Print(deck[card_index].Name, ", ")
+		drawn_hand = append(drawn_hand, deck[card_index])
 		drawn_card_indexes = append(drawn_card_indexes, card_index)
 		sim.current_seed++
 	}
+	return drawn_hand
+}
+
+func get_best_fusion(hand []Card) Card {
+	for _, card := range hand {
+		fmt.Print(card.Name, "|")
+	}
 	fmt.Println()
-	fmt.Println()
+
+	for _, card := range hand {
+		for _, target_card := range hand {
+			for _, fusion := range card.m1_potential {
+				if slices.Contains(target_card.m2_potential, fusion) {
+					fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
+				}
+			}
+		}
+	}
+
+	return Card{}
 }

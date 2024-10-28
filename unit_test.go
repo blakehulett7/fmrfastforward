@@ -51,11 +51,9 @@ func TestMath(t *testing.T) {
 func TestBasicFusionOdds(t *testing.T) {
 	sim := simulation{starting_seed: 1, current_seed: 1}
 	deck := sim.generate_starting_deck()
-	for idx, card := range deck {
-		fmt.Println(idx, card.Name)
-	}
 	fmt.Println()
-	for i := 0; i < 100; i++ {
-		sim.draw_cards(deck[:], 5)
-	}
+	//for i := 0; i < 100; i++ {
+	starting_hand := sim.draw_cards(deck[:], 5)
+	get_best_fusion(starting_hand)
+	//}
 }

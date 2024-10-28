@@ -12,13 +12,7 @@ func evaluate_starting_deck(starting_deck [40]Card) {
 
 	card_counts := count_my_cards(starting_deck)
 
-	cards := []Card{}
-	for _, card := range starting_deck {
-		card.m1_potential = get_potential_fusions(card.Name, "m1")
-		card.m2_potential = get_potential_fusions(card.Name, "m2")
-		//fmt.Printf("%v:\n%v\n%v\n\n", card.Name, card.m1_potential, card.m2_potential)
-		cards = append(cards, card)
-	}
+	cards := starting_deck[:]
 
 	fusion_map_m1 := map[string][]string{}
 	fusion_map_m2 := map[string][]string{}
@@ -80,7 +74,7 @@ func evaluate_starting_deck(starting_deck [40]Card) {
 	for _, card := range fusions_by_atk {
 		chance_to_draw = odds_of_drawing_fusion(card, 5)
 		chance_to_draw *= 100
-		fmt.Println(card.Name, card.Attack, card.fusion_number, fmt.Sprintf("%.2f%%", chance_to_draw))
+		fmt.Println(card.Name, card.Attack, card.fusion_number, card.m1_components, card.m2_components, fmt.Sprintf("%.2f%%", chance_to_draw))
 	}
 	fmt.Println()
 
