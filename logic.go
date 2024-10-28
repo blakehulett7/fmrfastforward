@@ -122,3 +122,62 @@ func count_my_cards(deck [40]Card) map[string]int {
 	}
 	return counts
 }
+
+func get_best_fusions(deck [40]Card) []Fusion {
+	card_counts := count_my_cards(deck)
+
+	fusion_map_m1 := map[string][]string{}
+	fusion_map_m2 := map[string][]string{}
+	for _, card := range deck {
+		for _, target_card := range deck {
+			for _, fusion := range card.m1_potential {
+				if slices.Contains(target_card.m2_potential, fusion) {
+					//fmt.Printf("Found fusion! m1: %v, m2: %v, result: %v\n", card.Name, target_card.Name, fusion)
+					if !slices.Contains(fusion_map_m1[fusion], card.Name) {
+						count := card_counts[card.Name]
+						for i := 0; i < count; i++ {
+							fusion_map_m1[fusion] = append(fusion_map_m1[fusion], card.Name)
+						}
+					}
+
+					if !slices.Contains(fusion_map_m2[fusion], target_card.Name) {
+						count := card_counts[target_card.Name]
+						for i := 0; i < count; i++ {
+							fusion_map_m2[fusion] = append(fusion_map_m2[fusion], target_card.Name)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//fmt.Println(fusion_map_m1)
+	//fmt.Println(fusion_map_m2)
+
+	fusions := []Fusion{}
+	for fusion, m1_components := range fusion_map_m1 {
+
+		m2_components := fusion_map_m2[fusion]
+		//fmt.Printf("Fusion: %v, m1's: %v, m2's: %v\n", fusion, m1_components, m2_components)
+
+		fusion_card := get_card(strings.Split(fusion, "|")[0]) //Huge performace hit here just fyi, solution in concurrency?
+		num, _ := strconv.Atoi(strings.Split(fusion, "|")[1])
+		assert(num > 0, "bad conversion")
+
+		fusion := Fusion{
+			Name:          fusion_card.Name,
+			Attack:        fusion_card.Attack,
+			Defense:       fusion_card.Defense,
+			fusion_number: num,
+			m1_components: m1_components,
+			m2_components: m2_components,
+		}
+
+		fusions = append(fusions, fusion)
+	}
+	slices.SortFunc(fusions, func(a Fusion, b Fusion) int {
+		return b.Attack - a.Attack
+	})
+
+	return fusions
+}
