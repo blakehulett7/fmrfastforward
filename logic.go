@@ -80,7 +80,7 @@ func evaluate_starting_deck(starting_deck []Card) {
 	for _, card := range fusions_by_atk {
 		chance_to_draw = odds_of_drawing_fusion(card, 5)
 		chance_to_draw *= 100
-		fmt.Println(card.Name, card.Attack, card.fusion_number, card.m1_components, card.m2_components, fmt.Sprintf("%.2f%%", chance_to_draw))
+		fmt.Println(card.Name, card.Attack, card.fusion_number, fmt.Sprintf("%.2f%%", chance_to_draw))
 	}
 	fmt.Println()
 
@@ -89,23 +89,30 @@ func evaluate_starting_deck(starting_deck []Card) {
 		return b.Attack - a.Attack
 	})
 	chance_to_draw = 0
-	for _, card := range deck_by_atk {
-		chance_to_draw++
-		chance_to_not_draw := 40 - chance_to_draw
-		first_hand_percent_change_to_draw := (1 - ((chance_to_not_draw / 40.0) * ((chance_to_not_draw - 1) / 39.0) * ((chance_to_not_draw - 2) / 38.0) * ((chance_to_not_draw - 3) / 37.0) * ((chance_to_not_draw - 4) / 36.0))) * 100
-		fmt.Println(card.Name, card.Attack, fmt.Sprintf("%.2f%%", first_hand_percent_change_to_draw))
-	}
+
+	/*
+		for _, card := range deck_by_atk {
+			chance_to_draw++
+			chance_to_not_draw := 40 - chance_to_draw
+			first_hand_percent_change_to_draw := (1 - ((chance_to_not_draw / 40.0) * ((chance_to_not_draw - 1) / 39.0) * ((chance_to_not_draw - 2) / 38.0) * ((chance_to_not_draw - 3) / 37.0) * ((chance_to_not_draw - 4) / 36.0))) * 100
+			fmt.Println(card.Name, card.Attack, fmt.Sprintf("%.2f%%", first_hand_percent_change_to_draw))
+		}
+	*/
 
 	fmt.Println()
-	sim := simulation{starting_seed: 1, current_seed: 1} //temporary
-	sim.draw_cards(starting_deck, 5)
+	/*
+		sim := simulation{starting_seed: 1, current_seed: 1} //temporary
+		sim.draw_cards(starting_deck, 5)
+	*/
 
 	fmt.Println()
-	fmt.Println(odds_of_drawing_fusion(Fusion{
-		m1_components: []string{"1", "2"},
-		m2_components: []string{"3", "4"},
-	}, 5))
-	fmt.Println(add_fusion_odds(fusions_by_atk[0], fusions_by_atk[1]))
+	/*
+		fmt.Println(odds_of_drawing_fusion(Fusion{
+			m1_components: []string{"1", "2"},
+			m2_components: []string{"3", "4"},
+		}, 5))
+		fmt.Println(add_fusion_odds(fusions_by_atk[0], fusions_by_atk[1]))
+	*/
 	fmt.Println()
 }
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	//"os"
-	"fmt"
 	"testing"
 
 	"github.com/montanaflynn/stats"
@@ -40,9 +39,18 @@ func TestGenerateStarterDeck(t *testing.T) {
 
 func TestEvaluateStarterDeck(t *testing.T) {
 	sim := simulation{starting_seed: 1, current_seed: 1}
-	evaluate_starting_deck(sim.generate_starting_deck())
+	deck := sim.generate_starting_deck()
+	evaluate_starting_deck(deck)
+	sim.draw_cards(deck, 5)
 }
 
 func TestMath(t *testing.T) {
-	fmt.Println(stats.Ncr(40, 5))
+	assert(stats.Ncr(40, 5) == 658008, "Ncr algo is broken")
+}
+
+func TestBasicFusionOdds(t *testing.T) {
+	sim := simulation{starting_seed: 1, current_seed: 1}
+	deck := sim.generate_starting_deck()
+	evaluate_starting_deck(deck)
+	sim.draw_cards(deck, 5)
 }

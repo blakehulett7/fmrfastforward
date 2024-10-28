@@ -78,10 +78,13 @@ func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []s
 
 func (sim simulation) draw_cards(deck []Card, number int) {
 	for i := 0; i < number; i++ {
-		card_index := rand.IntN(len(deck))
+		source := rand.NewPCG(sim.current_seed, 0)
+		rng := rand.New(source)
+		card_index := rng.IntN(len(deck))
 		sim.increment_seed()
 		fmt.Print(deck[card_index].Name, ", ")
 		deck = append(deck[:card_index], deck[card_index+1:]...)
 	}
-	fmt.Print("\n")
+	fmt.Println()
+	fmt.Println()
 }
