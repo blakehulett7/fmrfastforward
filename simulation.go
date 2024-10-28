@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
+	"slices"
 )
 
 type simulation struct {
@@ -78,13 +79,19 @@ func (sim simulation) get_cards_from_pool(pool []Probability, num_cards int) []s
 }
 
 func (sim *simulation) draw_cards(deck []Card, number int) {
+	drawn_card_indexes := []int{}
 	for i := 0; i < number; i++ {
 		source := rand.NewPCG(sim.current_seed, 0)
 		rng := rand.New(source)
 		card_index := rng.IntN(len(deck))
+		if slices.Contains(drawn_card_indexes, card_index) {
+			sim.current_seed++
+			i--
+			continue
+		}
 		fmt.Print(card_index)
 		fmt.Print(deck[card_index].Name, ", ")
-		deck = append(deck[:card_index], deck[card_index+1:]...)
+		drawn_card_indexes = append(drawn_card_indexes, card_index)
 		sim.current_seed++
 	}
 	fmt.Println()
