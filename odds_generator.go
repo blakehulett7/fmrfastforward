@@ -25,6 +25,7 @@ func generate_all_possible_hands(num_cards_in_deck int) [][]int {
 		}
 	}
 	fmt.Println("all hands generated...")
+	fmt.Println()
 
 	assert(len(hands) == 658008, "possible hands generated is incorrect")
 

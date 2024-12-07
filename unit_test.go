@@ -2,7 +2,7 @@ package main
 
 import (
 	//"os"
-	//"fmt"
+	"fmt"
 	"testing"
 	//"github.com/montanaflynn/stats"
 )
@@ -60,5 +60,9 @@ func TestBasicFusionOdds(t *testing.T) {
 */
 
 func TestHandGenerator(t *testing.T) {
-	successes := find_successful_hands(generate_all_possible_hands(40))
+	hands := generate_all_possible_hands(40)
+	successes := find_successful_hands(hands)
+	fmt.Printf("Number of successful hands: %v\n", successes)
+	fmt.Printf("Number of total hands: %v\n", len(hands))
+	fmt.Println(float64(successes) / float64(len(hands)))
 }
