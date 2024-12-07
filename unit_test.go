@@ -3,8 +3,8 @@ package main
 import (
 	//"os"
 	"fmt"
+	"github.com/montanaflynn/stats"
 	"testing"
-	//"github.com/montanaflynn/stats"
 )
 
 /*
@@ -37,8 +37,8 @@ func TestGenerateStarterDeck(t *testing.T) {
 	sim.generate_starting_deck()
 }
 
-/*
 func TestEvaluateStarterDeck(t *testing.T) {
+	fmt.Println()
 	sim := simulation{starting_seed: 1, current_seed: 1}
 	deck := sim.generate_starting_deck()
 	evaluate_starting_deck(deck)
@@ -48,6 +48,7 @@ func TestMath(t *testing.T) {
 	assert(stats.Ncr(40, 5) == 658008, "Ncr algo is broken")
 }
 
+/*
 func TestBasicFusionOdds(t *testing.T) {
 	sim := simulation{starting_seed: 1, current_seed: 1}
 	deck := sim.generate_starting_deck()
@@ -59,6 +60,7 @@ func TestBasicFusionOdds(t *testing.T) {
 }
 */
 
+/*
 func TestHandGenerator(t *testing.T) {
 	hands := generate_all_possible_hands(40)
 	successes := find_successful_hands(hands)
@@ -66,3 +68,4 @@ func TestHandGenerator(t *testing.T) {
 	fmt.Printf("Number of total hands: %v\n", len(hands))
 	fmt.Println(float64(successes) / float64(len(hands)))
 }
+*/
