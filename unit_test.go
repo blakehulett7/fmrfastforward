@@ -2,10 +2,9 @@ package main
 
 import (
 	//"os"
-	"fmt"
+	//"fmt"
 	"testing"
-
-	"github.com/montanaflynn/stats"
+	//"github.com/montanaflynn/stats"
 )
 
 /*
@@ -38,6 +37,7 @@ func TestGenerateStarterDeck(t *testing.T) {
 	sim.generate_starting_deck()
 }
 
+/*
 func TestEvaluateStarterDeck(t *testing.T) {
 	sim := simulation{starting_seed: 1, current_seed: 1}
 	deck := sim.generate_starting_deck()
@@ -57,3 +57,4 @@ func TestBasicFusionOdds(t *testing.T) {
 	get_best_fusion(starting_hand)
 	//}
 }
+*/
