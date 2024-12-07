@@ -58,3 +58,7 @@ func TestBasicFusionOdds(t *testing.T) {
 	//}
 }
 */
+
+func TestHandGenerator(t *testing.T) {
+	successes := find_successful_hands(generate_all_possible_hands(40))
+}
